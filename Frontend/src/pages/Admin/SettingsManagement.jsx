@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Music, Trash2, Upload, MapPin, Phone, Image } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { useAppContext } from '../../context/AppContext';
 import './SettingsManagement.css';
 
 const SettingsManagement = () => {

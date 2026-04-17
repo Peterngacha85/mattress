@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, X, Upload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
+import { useAppContext } from '../../context/AppContext';
 import './ProductManagement.css';
 
 const ProductManagement = ({ view = 'all' }) => {
