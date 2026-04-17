@@ -3,7 +3,72 @@ import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
 import { Package, Settings, LogOut, LayoutDashboard } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import SettingsManagement from './SettingsManagement';
+import api from '../../services/api';
 import './Dashboard.css';
+
+const AdminOverview = () => {
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data } = await api.get('/products/stats');
+        setStats(data);
+      } catch (err) {
+        console.error("Stats error", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (loading) return <div className="admin-loading">Loading Dashboard Stats...</div>;
+
+  return (
+    <div className="overview-page">
+      <h1>Admin <span>Overview</span></h1>
+      <p>Welcome back! Here is a summary of your site's current status.</p>
+      
+      <div className="stats-grid">
+        <div className="stat-card">
+          <Package className="stat-icon" />
+          <div className="stat-info">
+            <h3>{stats?.totalProducts || 0}</h3>
+            <span>Total Products</span>
+          </div>
+        </div>
+        <div className="stat-card">
+          <LayoutDashboard className="stat-icon" />
+          <div className="stat-info">
+            <h3>{stats?.totalCategories || 0}</h3>
+            <span>Categories</span>
+          </div>
+        </div>
+        <div className="stat-card highlight">
+          <Settings className="stat-icon" />
+          <div className="stat-info">
+            <h3>Live</h3>
+            <span>System Status</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="recent-activity">
+        <h2>Category Distribution</h2>
+        <div className="category-counts">
+          {stats?.categoryDistribution?.map(cat => (
+            <div key={cat._id} className="cat-chip">
+              <span className="cat-name">{cat._id}</span>
+              <span className="cat-count">{cat.count} Items</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -44,7 +109,7 @@ const Dashboard = () => {
 
       <main className="dashboard-content">
         <Routes>
-          <Route path="dashboard" element={<div className="overview-page"><h1>Welcome, Admin</h1><p>Select a section to manage your site content.</p></div>} />
+          <Route path="dashboard" element={<AdminOverview />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="settings" element={<SettingsManagement />} />
         </Routes>

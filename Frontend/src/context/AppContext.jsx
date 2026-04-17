@@ -12,6 +12,19 @@ export const AppProvider = ({ children }) => {
     audioTracks: []
   });
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState(() => localStorage.getItem('kisau_theme') || 'dark');
+
+  useEffect(() => {
+    localStorage.setItem('kisau_theme', theme);
+    const root = window.document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light-theme');
+    } else {
+      root.classList.remove('light-theme');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   // Cart State with LocalStorage Persistence
   const [cart, setCart] = useState(() => {
@@ -72,7 +85,7 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider value={{ 
       products, settings, loading, 
       cart, addToCart, removeFromCart, updateQuantity, clearCart,
-      fetchData 
+      fetchData, theme, toggleTheme
     }}>
       {children}
     </AppContext.Provider>

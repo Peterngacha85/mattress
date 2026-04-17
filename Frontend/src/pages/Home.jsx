@@ -1,5 +1,6 @@
 import React from 'react';
 import Hero from '../components/Hero';
+import PremiumSection from '../components/PremiumSection';
 import ProductGrid from '../components/ProductGrid';
 import Footer from '../components/Footer';
 import GoogleMap from '../components/GoogleMap';
@@ -46,6 +47,8 @@ const Home = () => {
         </div>
       </section>
 
+      <PremiumSection />
+      
       {/* Product Section */}
       <section id="products" className="products-section">
         <div className="container">

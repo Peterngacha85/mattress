@@ -57,50 +57,81 @@ const Cart = () => {
         <h1 className="page-title">Shopping <span>Cart</span></h1>
         
         <div className="cart-grid">
-          <div className="cart-items">
-            {cart.map((item, idx) => (
-              <div key={`${item._id}-${item.size}`} className="cart-item">
-                <div className="item-image">
-                  <img src={item.image} alt={item.name} />
+          <div className="cart-list-container">
+            <div className="cart-items-header">
+              <span>Product Details</span>
+              <span>Quantity</span>
+              <span>Total Price</span>
+            </div>
+            <div className="cart-items">
+              {cart.map((item) => (
+                <div key={`${item._id}-${item.size}`} className="cart-item">
+                  <div className="item-main">
+                    <div className="item-image">
+                      <img src={item.image} alt={item.name} />
+                    </div>
+                    <div className="item-info">
+                      <h3>{item.name}</h3>
+                      <p className="item-variant">Size: <span>{item.size}</span></p>
+                      <p className="item-price-unit">{formatPrice(item.price)}</p>
+                      <button className="remove-link" onClick={() => removeFromCart(item._id, item.size)}>
+                        <Trash2 size={14} /> Remove
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="item-quantity-wrapper">
+                    <div className="item-quantity">
+                      <button onClick={() => updateQuantity(item._id, item.size, item.quantity - 1)} disabled={item.quantity <= 1}><Minus size={16} /></button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item._id, item.size, item.quantity + 1)}><Plus size={16} /></button>
+                    </div>
+                  </div>
+
+                  <div className="item-total">
+                    {formatPrice(item.price * item.quantity)}
+                  </div>
                 </div>
-                <div className="item-info">
-                  <h3>{item.name}</h3>
-                  <p className="item-variant">Size: {item.size}</p>
-                  <p className="item-price">{formatPrice(item.price)}</p>
-                </div>
-                <div className="item-quantity">
-                  <button onClick={() => updateQuantity(item._id, item.size, item.quantity - 1)}><Minus size={16} /></button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item._id, item.size, item.quantity + 1)}><Plus size={16} /></button>
-                </div>
-                <div className="item-total">
-                  {formatPrice(item.price * item.quantity)}
-                </div>
-                <button className="remove-item" onClick={() => removeFromCart(item._id, item.size)}>
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          <div className="cart-summary">
-            <h3>Order Summary</h3>
-            <div className="summary-row">
-              <span>Items ({cart.length})</span>
-              <span>{formatPrice(total)}</span>
+          <div className="cart-summary-container">
+            <div className="cart-summary">
+              <h3>Order Summary</h3>
+              <div className="summary-details">
+                <div className="summary-row">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(total)}</span>
+                </div>
+                <div className="summary-row">
+                  <span>Delivery</span>
+                  <span className="free">FREE</span>
+                </div>
+                <div className="summary-row">
+                  <span>Tax</span>
+                  <span>Calculated at checkout</span>
+                </div>
+              </div>
+              
+              <div className="total-row">
+                <span>Grand Total</span>
+                <span>{formatPrice(total)}</span>
+              </div>
+
+              <div className="checkout-note">
+                 ✨ Free delivery within Nairobi & Kiambu.
+              </div>
+
+              <button className="checkout-btn" onClick={handleCheckout}>
+                <Send size={18} /> 
+                <span>Complete Order on WhatsApp</span>
+              </button>
+              
+              <Link to="/" className="continue-link">
+                <ArrowLeft size={16} /> Continue Shopping
+              </Link>
             </div>
-            <div className="summary-row">
-              <span>Delivery</span>
-              <span className="free">FREE</span>
-            </div>
-            <div className="total-row">
-              <span>Grand Total</span>
-              <span>{formatPrice(total)}</span>
-            </div>
-            <button className="checkout-btn" onClick={handleCheckout}>
-              <Send size={18} /> Order via WhatsApp
-            </button>
-            <Link to="/" className="continue-link">Continue Shopping</Link>
           </div>
         </div>
       </div>

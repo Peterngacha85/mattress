@@ -71,9 +71,103 @@
 
 .overview-page h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.overview-page h1 span {
+  color: var(--primary);
 }
 
 .overview-page p {
   color: var(--text-muted);
+  margin-bottom: 3rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-5px);
+}
+
+.stat-card.highlight {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(20, 20, 20, 1) 100%);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--primary);
+  background: rgba(239, 68, 68, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.stat-info h3 {
+  font-size: 1.75rem;
+  color: white;
+}
+
+.stat-info span {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.recent-activity h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.category-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cat-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cat-name {
+  font-weight: 800;
+  color: white;
+}
+
+.cat-count {
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.admin-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-weight: 700;
+  color: var(--primary);
 }

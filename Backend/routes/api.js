@@ -11,6 +11,7 @@ router.post('/auth/login', authController.login);
 
 // Products
 router.get('/products', productController.getAllProducts);
+router.get('/products/stats', protect, productController.getStats);
 router.post('/products', protect, productController.createProduct);
 router.put('/products/:id', protect, productController.updateProduct);
 router.delete('/products/:id', protect, productController.deleteProduct);

@@ -7,7 +7,7 @@ import './Navbar.css';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { cart } = useAppContext();
+  const { cart, theme, toggleTheme } = useAppContext();
   const location = useLocation();
 
   useEffect(() => {
@@ -23,9 +23,14 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <Link to="/" className="logo">
+        <a href="/" className="logo" onClick={(e) => {
+          if (location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }}>
           Kisau<span>Mattresses</span>
-        </Link>
+        </a>
 
         <div className="nav-links desktop-only">
           <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Home</Link>
@@ -36,7 +41,9 @@ const Navbar = () => {
 
         <div className="nav-actions">
            <button className="icon-btn search-btn"><Search size={20} /></button>
-           <button className="icon-btn theme-btn"><Sun size={20} /></button>
+           <button className="icon-btn theme-btn" onClick={toggleTheme}>
+             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+           </button>
            <Link to="/cart" className="cart-btn">
              <ShoppingCart size={20} />
              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}

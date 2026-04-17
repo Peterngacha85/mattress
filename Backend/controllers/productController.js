@@ -42,6 +42,27 @@ const productController = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+
+    getStats: async (req, res) => {
+        try {
+            const totalProducts = await Product.countDocuments();
+            const categories = await Product.distinct('category');
+            const totalCategories = categories.length;
+            
+            // Get count per category
+            const categoryDistribution = await Product.aggregate([
+                { $group: { _id: '$category', count: { $sum: 1 } } }
+            ]);
+
+            res.json({
+                totalProducts,
+                totalCategories,
+                categoryDistribution
+            });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 };
 

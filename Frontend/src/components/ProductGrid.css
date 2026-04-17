@@ -69,56 +69,200 @@
 /* Expanded Filters */
 .expanded-filters {
   margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #262626;
+  background: #111;
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid #222;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.filter-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-}
-
-.filter-col h4 {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: #666;
-  letter-spacing: 1px;
-  margin-bottom: 1.25rem;
-}
-
-.filter-list {
+.filter-options-title {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
 }
 
-.filter-list button {
-  text-align: left;
+.filter-options-title .left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.icon-red { color: var(--primary); }
+
+.reset-text-btn {
   background: none;
   border: none;
-  color: #a3a3a3;
-  font-size: 0.9rem;
+  color: #737373;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0.5rem 0;
-  width: fit-content;
+  font-size: 0.95rem;
   transition: color 0.3s ease;
 }
 
-.filter-list button:hover,
-.filter-list button.active {
-  color: var(--primary);
+.reset-text-btn:hover { color: var(--primary); }
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
 }
 
-.reset-btn {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--primary);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-weight: 600;
+.filter-col h4 {
+  font-size: 0.9rem;
+  color: #525252;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.scroll-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.scroll-list::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
+}
+
+.scroll-list button {
+  background: none;
+  border: none;
+  color: #a3a3a3;
+  text-align: left;
+  padding: 0.6rem 0.25rem;
+  font-size: 1rem;
   cursor: pointer;
-  margin-top: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.scroll-list button:hover, .scroll-list button.active {
+  color: white;
+  padding-left: 0.5rem;
+}
+
+.scroll-list button.active {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Price Filter Styling */
+.price-filter-control {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.price-input-box {
+  background: #0a0a0a;
+  border: 1px solid #262626;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  flex: 1;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.custom-range-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #262626;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+.custom-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--primary);
+  border: 4px solid #000;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #525252;
+  font-weight: 600;
+}
+
+/* Premium Section Styles */
+.premium-section {
+  padding: 6rem 0;
+  background: #0a0a0a;
+  text-align: center;
+}
+
+.premium-header {
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
+.premium-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.05em;
+}
+
+.premium-subtitle {
+  font-size: 1.2rem;
+  color: #a3a3a3;
+  line-height: 1.8;
+}
+
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  padding: 0 2rem;
+}
+
+.premium-card {
+  transform: scale(1.05); /* Make them appear bigger */
+}
+
+@media (max-width: 1024px) {
+  .filter-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+  .premium-grid { grid-template-columns: 1fr; gap: 4rem; }
+  .premium-title { font-size: 2.5rem; }
+}
+
+@media (max-width: 640px) {
+  .filter-grid { grid-template-columns: 1fr; }
+  .expanded-filters { padding: 1.5rem; }
 }
 
 /* Quick Tab Scroll */
