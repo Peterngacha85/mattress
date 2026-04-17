@@ -83,12 +83,18 @@ const SettingsManagement = () => {
     }
   };
 
+  const { triggerConfirm } = useAppContext();
+
   const deleteTrack = async (id) => {
-    if (window.confirm("Delete this track?")) {
-      const { data } = await api.delete(`/settings/audio/${id}`);
-      setSettings(data);
-      toast.success("Track deleted");
-    }
+    triggerConfirm({
+      title: "Delete Audio Track?",
+      message: "Are you sure you want to remove this background music? This will delete the file forever.",
+      onConfirm: async () => {
+        const { data } = await api.delete(`/settings/audio/${id}`);
+        setSettings(data);
+        toast.success("Track deleted");
+      }
+    });
   };
 
   return (

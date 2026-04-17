@@ -88,13 +88,38 @@ export const AppProvider = ({ children }) => {
 
   const clearCart = () => setCart([]);
 
+  // Global Confirmation Modal State
+  const [confirmConfig, setConfirmConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: null
+  });
+
+  const triggerConfirm = (config) => {
+    setConfirmConfig({
+      ...config,
+      isOpen: true
+    });
+  };
+
+  const closeConfirm = () => {
+    setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+  };
+
+  const handleGlobalConfirm = () => {
+    if (confirmConfig.onConfirm) confirmConfig.onConfirm();
+    closeConfirm();
+  };
+
   return (
     <AppContext.Provider value={{ 
       products, settings, loading, 
       cart, addToCart, removeFromCart, updateQuantity, clearCart,
       fetchData, theme, toggleTheme,
       isCartPopupOpen, lastAddedItem, closeCartPopup,
-      searchTerm, setSearchTerm
+      searchTerm, setSearchTerm,
+      confirmConfig, triggerConfirm, closeConfirm, handleGlobalConfirm
     }}>
       {children}
     </AppContext.Provider>

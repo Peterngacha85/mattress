@@ -78,12 +78,18 @@ const ProductManagement = ({ view = 'all' }) => {
     }
   };
 
+  const { triggerConfirm } = useAppContext();
+
   const deleteProduct = async (id) => {
-    if (window.confirm("Delete this product?")) {
-      await api.delete(`/products/${id}`);
-      toast.success("Product deleted");
-      fetchProducts();
-    }
+    triggerConfirm({
+      title: "Delete Product?",
+      message: "This action cannot be undone. Are you sure you want to remove this mattress from your shop?",
+      onConfirm: async () => {
+        await api.delete(`/products/${id}`);
+        toast.success("Product deleted");
+        fetchProducts();
+      }
+    });
   };
 
   const categories = ['All', 'Heavy Duty', 'Standard', 'Moko', 'Superfoam', 'Johari Fibre', 'Bed Base', 'Pillow'];

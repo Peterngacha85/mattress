@@ -13,6 +13,8 @@ import Navbar from './components/Navbar';
 import FloatingAudio from './components/FloatingAudio';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import CartPopup from './components/CartPopup';
+import ConfirmModal from './components/ConfirmModal';
+import { useAppContext } from './context/AppContext';
 
 // Client Layout: Includes Navbar and Floating UI
 const ClientLayout = ({ children }) => (
@@ -34,6 +36,8 @@ const AdminLayout = ({ children }) => (
 );
 
 function App() {
+  const { confirmConfig, closeConfirm, handleGlobalConfirm } = useAppContext();
+
   return (
     <AppProvider>
       <Router>
@@ -57,6 +61,13 @@ function App() {
           {/* Catch-all 404 Route */}
           <Route path="*" element={<ClientLayout><NotFound /></ClientLayout>} />
         </Routes>
+        <ConfirmModal 
+          isOpen={confirmConfig.isOpen}
+          title={confirmConfig.title}
+          message={confirmConfig.message}
+          onConfirm={handleGlobalConfirm}
+          onCancel={closeConfirm}
+        />
         <Toaster position="top-right" />
       </Router>
     </AppProvider>
