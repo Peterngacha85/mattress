@@ -3,7 +3,7 @@ services:
     name: kisau-mattress-backend
     env: node
     plan: free
-    buildCommand: npm install --legacy-peer-deps && npm install --prefix ../Frontend && npm run build --prefix ../Frontend
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: node server.js
     envVars:
       - key: PORT
