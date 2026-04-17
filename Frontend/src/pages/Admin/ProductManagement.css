@@ -20,6 +20,25 @@
   font-weight: 600;
 }
 
+.category-filter select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  outline: none;
+}
+
+.category-filter select:focus {
+  border-color: var(--primary);
+}
+
+.category-filter select option {
+  background: var(--bg-card);
+  color: white;
+}
+
 .product-table-container {
   background: var(--bg-card);
   border-radius: 16px;
@@ -159,9 +178,11 @@
   background: var(--bg-card);
   width: 100%;
   max-width: 600px;
-  padding: 2.5rem;
+  padding: 1.5rem 2rem;
   border-radius: 20px;
   border: 1px solid var(--border);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-header {
@@ -187,12 +208,18 @@
 }
 
 .product-form input, .product-form select, .product-form textarea {
-  background: var(--bg-dark);
+  background: var(--bg-main);
   border: 1px solid var(--border);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   color: white;
   width: 100%;
+  outline: none;
+}
+
+.product-form select option {
+  background: var(--bg-card);
+  color: white;
 }
 
 .file-upload {
