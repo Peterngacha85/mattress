@@ -14,7 +14,7 @@ const Login = () => {
     try {
       const { data } = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', data.token);
-      navigate('/admin/dashboard');
+      navigate('/kisauadminmattress/dashboard');
     } catch (err) {
       setError('Invalid credentials');
     }

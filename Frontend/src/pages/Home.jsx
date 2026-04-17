@@ -47,9 +47,6 @@ const Home = () => {
         </div>
       </section>
 
-      <PremiumSection />
-      
-      {/* Product Section */}
       <section id="products" className="products-section">
         <div className="container">
           <div className="section-header">
@@ -60,6 +57,8 @@ const Home = () => {
           <ProductGrid />
         </div>
       </section>
+
+      <PremiumSection />
 
       <section id="about" className="about-section">
         <div className="container">

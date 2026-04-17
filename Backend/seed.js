@@ -63,7 +63,8 @@ const seedData = async () => {
                     { size: "4x6", price: 24500 },
                     { size: "5x6", price: 30000 },
                     { size: "6x6", price: 36000 }
-                ]
+                ],
+                isFeatured: true
             },
             {
                 name: "Johari Fibre Orthopedic",

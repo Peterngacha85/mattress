@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Package, Settings, LogOut, LayoutDashboard } from 'lucide-react';
 import ProductManagement from './ProductManagement';
@@ -76,7 +76,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/admin/login');
+    navigate('/kisauadminmattress/login');
   };
 
   const isActive = (path) => location.pathname.includes(path);
@@ -88,15 +88,15 @@ const Dashboard = () => {
           KISAU<span>ADMIN</span>
         </div>
         <nav className="sidebar-nav">
-          <Link to="/admin/dashboard" className={`nav-item ${isActive('dashboard') && !isActive('products') && !isActive('settings') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/dashboard" className={`nav-item ${isActive('dashboard') && !isActive('products') && !isActive('settings') ? 'active' : ''}`}>
             <LayoutDashboard size={20} />
             <span>Overview</span>
           </Link>
-          <Link to="/admin/products" className={`nav-item ${isActive('products') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/products" className={`nav-item ${isActive('products') ? 'active' : ''}`}>
             <Package size={20} />
             <span>Products</span>
           </Link>
-          <Link to="/admin/settings" className={`nav-item ${isActive('settings') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/settings" className={`nav-item ${isActive('settings') ? 'active' : ''}`}>
             <Settings size={20} />
             <span>Settings</span>
           </Link>

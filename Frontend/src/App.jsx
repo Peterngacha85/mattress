@@ -14,7 +14,7 @@ import FloatingWhatsApp from './components/FloatingWhatsApp';
 // Helper component to hide public elements on admin pages
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/admin');
+  const isAdmin = location.pathname.startsWith('/kisauadminmattress');
 
   return (
     <>
@@ -33,8 +33,8 @@ function App() {
         <LayoutWrapper>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/admin/login" element={<Login />} />
-            <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/kisauadminmattress/login" element={<Login />} />
+            <Route path="/kisauadminmattress/*" element={<AdminDashboard />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
         </LayoutWrapper>
