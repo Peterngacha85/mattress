@@ -251,7 +251,20 @@
 }
 
 .premium-card {
-  transform: scale(1.05); /* Make them appear bigger */
+  transform: scale(1.1); /* Significant boost */
+  transition: transform 0.5s ease;
+}
+
+.premium-card:hover {
+  transform: scale(1.15) translateY(-10px);
+}
+
+.premium-card .product-card {
+  padding: 1.5rem; /* More spacing inside */
+}
+
+.premium-card .product-card h3 {
+  font-size: 1.5rem; /* Larger title */
 }
 
 @media (max-width: 1024px) {
