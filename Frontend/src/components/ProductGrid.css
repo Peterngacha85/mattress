@@ -271,9 +271,9 @@
   .filter-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
   .premium-grid { 
     grid-template-columns: 1fr; 
-    gap: 2rem; 
-    padding: 0 1rem;
-    overflow: hidden; /* Prevent scaling related overflow */
+    gap: 1.5rem; 
+    padding: 0 0.5rem;
+    overflow: hidden; 
   }
   .premium-title { 
     font-size: 2.2rem; 
