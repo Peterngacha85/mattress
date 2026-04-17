@@ -43,10 +43,16 @@ app.get('/api/health', (req, res) => {
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../Frontend/dist')));
+    // Check possible locations for the dist folder
+    const siblingDist = path.join(__dirname, '../Frontend/dist');
+    const localDist = path.join(__dirname, './dist');
+    
+    const distPath = require('fs').existsSync(localDist) ? localDist : siblingDist;
+
+    app.use(express.static(distPath));
 
     app.get('/:path*', (req, res) =>
-        res.sendFile(path.resolve(__dirname, '..', 'Frontend', 'dist', 'index.html'))
+        res.sendFile(path.resolve(distPath, 'index.html'))
     );
 } else {
     app.get('/', (req, res) => {
