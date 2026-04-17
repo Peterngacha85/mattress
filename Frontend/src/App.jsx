@@ -39,38 +39,36 @@ function App() {
   const { confirmConfig, closeConfirm, handleGlobalConfirm } = useAppContext();
 
   return (
-    <AppProvider>
-      <Router>
-        <Routes>
-          {/* Public Client Routes */}
-          <Route path="/" element={<ClientLayout><Home /></ClientLayout>} />
-          <Route path="/cart" element={<ClientLayout><Cart /></ClientLayout>} />
+    <Router>
+      <Routes>
+        {/* Public Client Routes */}
+        <Route path="/" element={<ClientLayout><Home /></ClientLayout>} />
+        <Route path="/cart" element={<ClientLayout><Cart /></ClientLayout>} />
 
-          {/* Admin Routes */}
-          <Route path="/kisauadminmattress/login" element={<AdminLayout><Login /></AdminLayout>} />
-          <Route 
-            path="/kisauadminmattress/*" 
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminDashboard />
-                </AdminLayout>
-              </ProtectedRoute>
-            } 
-          />
-          {/* Catch-all 404 Route */}
-          <Route path="*" element={<ClientLayout><NotFound /></ClientLayout>} />
-        </Routes>
-        <ConfirmModal 
-          isOpen={confirmConfig.isOpen}
-          title={confirmConfig.title}
-          message={confirmConfig.message}
-          onConfirm={handleGlobalConfirm}
-          onCancel={closeConfirm}
+        {/* Admin Routes */}
+        <Route path="/kisauadminmattress/login" element={<AdminLayout><Login /></AdminLayout>} />
+        <Route 
+          path="/kisauadminmattress/*" 
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
+            </ProtectedRoute>
+          } 
         />
-        <Toaster position="top-right" />
-      </Router>
-    </AppProvider>
+        {/* Catch-all 404 Route */}
+        <Route path="*" element={<ClientLayout><NotFound /></ClientLayout>} />
+      </Routes>
+      <ConfirmModal 
+        isOpen={confirmConfig.isOpen}
+        title={confirmConfig.title}
+        message={confirmConfig.message}
+        onConfirm={handleGlobalConfirm}
+        onCancel={closeConfirm}
+      />
+      <Toaster position="top-right" />
+    </Router>
   );
 }
 
