@@ -17,6 +17,7 @@ const app = express();
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5000',
+    'https://mattress-nine.vercel.app',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
