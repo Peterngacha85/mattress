@@ -14,31 +14,34 @@ const FloatingAudio = () => {
   // Attempt to play on mount (or when tracks load)
   useEffect(() => {
     if (tracks.length > 0) {
-      const playAudio = () => {
-        audioRef.current?.play()
-          .then(() => setIsPlaying(true))
-          .catch(() => {
-            console.log("Autoplay blocked, waiting for interaction...");
-          });
+      const playAudio = async () => {
+        try {
+          await audioRef.current?.play();
+          setIsPlaying(true);
+        } catch (e) {
+          console.log("Autoplay blocked, waiting for interaction...");
+        }
       };
 
       playAudio();
 
-      // Fallback: Start audio on first user interaction if blocked
-      const handleFirstInteraction = () => {
-        if (!isPlaying) {
-          playAudio();
-        }
-        window.removeEventListener('click', handleFirstInteraction);
-        window.removeEventListener('touchstart', handleFirstInteraction);
+      // Robust Fallback: Start audio on any common interaction
+      const handleInteraction = () => {
+        playAudio();
+        // Remove all listeners once interaction happens
+        ['click', 'touchstart', 'mousedown', 'keydown', 'scroll'].forEach(event => {
+          window.removeEventListener(event, handleInteraction);
+        });
       };
 
-      window.addEventListener('click', handleFirstInteraction);
-      window.addEventListener('touchstart', handleFirstInteraction);
+      ['click', 'touchstart', 'mousedown', 'keydown', 'scroll'].forEach(event => {
+        window.addEventListener(event, handleInteraction, { once: true });
+      });
 
       return () => {
-        window.removeEventListener('click', handleFirstInteraction);
-        window.removeEventListener('touchstart', handleFirstInteraction);
+        ['click', 'touchstart', 'mousedown', 'keydown', 'scroll'].forEach(event => {
+          window.removeEventListener(event, handleInteraction);
+        });
       };
     }
   }, [tracks]);
