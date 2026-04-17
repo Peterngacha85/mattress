@@ -51,6 +51,12 @@ if (process.env.NODE_ENV === 'production') {
 
     app.use(express.static(distPath));
 
+    // Homepage
+    app.get('/', (req, res) =>
+        res.sendFile(path.resolve(distPath, 'index.html'))
+    );
+
+    // Any other route (for SPA)
     app.get('/*path', (req, res) =>
         res.sendFile(path.resolve(distPath, 'index.html'))
     );
