@@ -15,36 +15,40 @@ const FloatingAudio = () => {
   useEffect(() => {
     if (tracks.length > 0) {
       const playAudio = async () => {
+        if (isPlaying) return true; // Already playing
         try {
           await audioRef.current?.play();
           setIsPlaying(true);
+          // Success! Remove all listeners
+          cleanupListeners();
+          return true;
         } catch (e) {
-          console.log("Autoplay blocked, waiting for interaction...");
+          console.log("Autoplay blocked, wait for hard interaction...");
+          return false;
         }
       };
 
-      playAudio();
+      const cleanupListeners = () => {
+        ['click', 'touchstart', 'keyup'].forEach(event => {
+          window.removeEventListener(event, handleInteraction);
+        });
+      };
 
-      // Robust Fallback: Start audio on any common interaction
       const handleInteraction = () => {
         playAudio();
-        // Remove all listeners once interaction happens
-        ['click', 'touchstart', 'mousedown', 'keydown', 'scroll'].forEach(event => {
-          window.removeEventListener(event, handleInteraction);
-        });
       };
 
-      ['click', 'touchstart', 'mousedown', 'keydown', 'scroll'].forEach(event => {
-        window.addEventListener(event, handleInteraction, { once: true });
+      // Initial attempt
+      playAudio();
+
+      // Fallback: Start audio on hard interaction
+      ['click', 'touchstart', 'keyup'].forEach(event => {
+        window.addEventListener(event, handleInteraction);
       });
 
-      return () => {
-        ['click', 'touchstart', 'mousedown', 'keydown', 'scroll'].forEach(event => {
-          window.removeEventListener(event, handleInteraction);
-        });
-      };
+      return () => cleanupListeners();
     }
-  }, [tracks]);
+  }, [tracks, isPlaying]); // Watch isPlaying to ensure cleanup is robust
 
   // Handle track changes
   useEffect(() => {
