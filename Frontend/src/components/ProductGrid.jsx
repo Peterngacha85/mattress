@@ -5,8 +5,7 @@ import { useAppContext } from '../context/AppContext';
 import './ProductGrid.css';
 
 const ProductGrid = () => {
-  const { products, loading } = useAppContext();
-  const [searchTerm, setSearchTerm] = useState('');
+  const { products, loading, searchTerm, setSearchTerm } = useAppContext();
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [activeType, setActiveType] = useState('All');
   const [activeThickness, setActiveThickness] = useState('All');

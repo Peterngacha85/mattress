@@ -4,7 +4,7 @@ import { useAppContext } from '../context/AppContext';
 import './Hero.css';
 
 const Hero = () => {
-  const { settings } = useAppContext();
+  const { settings, searchTerm, setSearchTerm } = useAppContext();
   const [text, setText] = useState('');
   const [fullText, setFullText] = useState('Payment After Delivery | Nationwide Shipping | Premium Quality');
   const [index, setIndex] = useState(0);
@@ -58,8 +58,18 @@ const Hero = () => {
         {/* Search Bar in Hero */}
         <div className="hero-search-wrapper">
           <div className="hero-search-box">
-             <input type="text" placeholder="Search for mattresses, pillows..." />
-             <Search className="search-icon" size={20} />
+             <input 
+               type="text" 
+               placeholder="Search for mattresses, pillows..." 
+               value={searchTerm}
+               onChange={(e) => setSearchTerm(e.target.value)}
+               onKeyDown={(e) => {
+                 if (e.key === 'Enter') {
+                   handleExploreClick();
+                 }
+               }}
+             />
+             <Search className="search-icon" size={20} onClick={handleExploreClick} />
           </div>
         </div>
 

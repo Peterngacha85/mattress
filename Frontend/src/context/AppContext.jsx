@@ -15,6 +15,7 @@ export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => localStorage.getItem('kisau_theme') || 'dark');
   const [isCartPopupOpen, setIsCartPopupOpen] = useState(false);
   const [lastAddedItem, setLastAddedItem] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     localStorage.setItem('kisau_theme', theme);
@@ -92,7 +93,8 @@ export const AppProvider = ({ children }) => {
       products, settings, loading, 
       cart, addToCart, removeFromCart, updateQuantity, clearCart,
       fetchData, theme, toggleTheme,
-      isCartPopupOpen, lastAddedItem, closeCartPopup
+      isCartPopupOpen, lastAddedItem, closeCartPopup,
+      searchTerm, setSearchTerm
     }}>
       {children}
     </AppContext.Provider>
