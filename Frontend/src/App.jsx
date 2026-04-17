@@ -14,11 +14,15 @@ import FloatingAudio from './components/FloatingAudio';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import CartPopup from './components/CartPopup';
 
-// Client Layout: Includes Navbar only
+// Client Layout: Includes Navbar and Floating UI
 const ClientLayout = ({ children }) => (
   <div className="client-layout">
     <Navbar />
     {children}
+    {/* Floating buttons only for client view */}
+    <FloatingAudio />
+    <FloatingWhatsApp />
+    <CartPopup />
   </div>
 );
 
@@ -53,10 +57,6 @@ function App() {
           {/* Catch-all 404 Route */}
           <Route path="*" element={<ClientLayout><NotFound /></ClientLayout>} />
         </Routes>
-        {/* Floating buttons at root level to guarantee fixed positioning */}
-        <FloatingAudio />
-        <FloatingWhatsApp />
-        <CartPopup />
         <Toaster position="top-right" />
       </Router>
     </AppProvider>
