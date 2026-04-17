@@ -221,7 +221,7 @@
 /* Premium Section Styles */
 .premium-section {
   padding: 6rem 0;
-  background: #0a0a0a;
+  background: var(--bg-main);
   text-align: center;
 }
 
@@ -239,15 +239,15 @@
 
 .premium-subtitle {
   font-size: 1.2rem;
-  color: #a3a3a3;
+  color: var(--text-muted);
   line-height: 1.8;
 }
 
 .premium-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 3rem;
-  padding: 0 2rem;
+  gap: 6rem; /* Increased gap to accommodate scaling */
+  padding: 0 4rem;
 }
 
 .premium-card {
@@ -269,8 +269,28 @@
 
 @media (max-width: 1024px) {
   .filter-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-  .premium-grid { grid-template-columns: 1fr; gap: 4rem; }
-  .premium-title { font-size: 2.5rem; }
+  .premium-grid { 
+    grid-template-columns: 1fr; 
+    gap: 2rem; 
+    padding: 0 1rem;
+    overflow: hidden; /* Prevent scaling related overflow */
+  }
+  .premium-title { 
+    font-size: 2.2rem; 
+    padding: 0 1rem;
+    line-height: 1.2;
+  }
+  .premium-subtitle {
+     padding: 0 1.5rem;
+     font-size: 1rem;
+  }
+  .premium-card {
+    transform: scale(1) !important; /* Disable scale on mobile to avoid alignment issues */
+    margin-bottom: 2rem;
+  }
+  .premium-section {
+    padding: 4rem 0;
+  }
 }
 
 @media (max-width: 640px) {
@@ -290,9 +310,9 @@
 .tab-btn {
   white-space: nowrap;
   padding: 0.6rem 1.5rem;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  color: #a3a3a3;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   border-radius: 30px;
   font-weight: 700;
   font-size: 0.85rem;

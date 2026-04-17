@@ -7,37 +7,51 @@ import Home from './pages/Home';
 import Login from './pages/Admin/Login';
 import AdminDashboard from './pages/Admin/Dashboard';
 import Cart from './pages/Cart';
+import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import FloatingAudio from './components/FloatingAudio';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
-// Helper component to hide public elements on admin pages
-const LayoutWrapper = ({ children }) => {
-  const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/kisauadminmattress');
+// Client Layout: Includes Navbar only
+const ClientLayout = ({ children }) => (
+  <div className="client-layout">
+    <Navbar />
+    {children}
+  </div>
+);
 
-  return (
-    <>
-      {!isAdmin && <Navbar />}
-      {children}
-      {!isAdmin && <FloatingAudio />}
-      {!isAdmin && <FloatingWhatsApp />}
-    </>
-  );
-};
+// Admin Layout: Clean slate for the dashboard
+const AdminLayout = ({ children }) => (
+  <div className="admin-layout">
+    {children}
+  </div>
+);
 
 function App() {
   return (
     <AppProvider>
       <Router>
-        <LayoutWrapper>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/kisauadminmattress/login" element={<Login />} />
-            <Route path="/kisauadminmattress/*" element={<AdminDashboard />} />
-            <Route path="/cart" element={<Cart />} />
-          </Routes>
-        </LayoutWrapper>
+        <Routes>
+          {/* Public Client Routes */}
+          <Route path="/" element={<ClientLayout><Home /></ClientLayout>} />
+          <Route path="/cart" element={<ClientLayout><Cart /></ClientLayout>} />
+
+          {/* Admin Routes */}
+          <Route path="/kisauadminmattress/login" element={<AdminLayout><Login /></AdminLayout>} />
+          <Route 
+            path="/kisauadminmattress/*" 
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+        {/* Floating buttons at root level to guarantee fixed positioning */}
+        <FloatingAudio />
+        <FloatingWhatsApp />
         <Toaster position="top-right" />
       </Router>
     </AppProvider>

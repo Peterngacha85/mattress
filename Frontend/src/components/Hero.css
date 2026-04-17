@@ -191,15 +191,38 @@
 }
 
 @media (max-width: 768px) {
+  .hero-section {
+    height: auto;
+    min-height: 85vh;
+    padding: 7rem 1.5rem 4rem;
+  }
   .hero-title {
     font-size: 2.2rem;
     letter-spacing: -1px;
+    margin-bottom: 1.25rem;
+  }
+  .typing-box {
+    height: auto;
+    min-height: 3rem;
+    margin-bottom: 2rem;
+  }
+  .typing-text {
+    font-size: 1rem;
+  }
+  .hero-subtext {
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
   }
   .hero-actions {
     flex-direction: column;
     width: 100%;
+    gap: 1.25rem;
   }
   .hero-actions button {
     width: 100%;
+    justify-content: center;
+  }
+  .scroll-arrow {
+    display: none;
   }
 }

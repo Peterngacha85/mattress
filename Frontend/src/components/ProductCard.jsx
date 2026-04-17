@@ -46,7 +46,7 @@ const ProductCard = ({ product }) => {
         </div>
 
         <div className="card-actions">
-          <button className="btn-cart" onClick={() => addToCart(product, selectedSize)}>
+          <button className="btn-cart" onClick={() => addToCart(product, selectedSize.size, selectedSize.price)}>
             <ShoppingCart size={18} /> Add to Cart
           </button>
           <button className="btn-whatsapp" onClick={handleWhatsApp}>

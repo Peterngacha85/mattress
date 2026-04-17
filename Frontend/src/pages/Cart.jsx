@@ -71,8 +71,8 @@ const Cart = () => {
                       <img src={item.image} alt={item.name} />
                     </div>
                     <div className="item-info">
-                      <h3>{item.name}</h3>
-                      <p className="item-variant">Size: <span>{item.size}</span></p>
+                      <h3 className="product-title">{item.name}</h3>
+                      <p className="item-variant">Size: <span>{typeof item.size === 'object' ? item.size.size : item.size}</span></p>
                       <p className="item-price-unit">{formatPrice(item.price)}</p>
                       <button className="remove-link" onClick={() => removeFromCart(item._id, item.size)}>
                         <Trash2 size={14} /> Remove

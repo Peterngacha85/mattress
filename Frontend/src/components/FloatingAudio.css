@@ -77,8 +77,8 @@
 }
 @media (max-width: 768px) {
   .floating-audio {
-    bottom: 1.5rem;
-    left: 1.5rem;
+    bottom: 1.25rem;
+    left: 1rem;
   }
   .music-icon {
     width: 44px;

@@ -110,7 +110,7 @@ const ProductManagement = () => {
                 <td>{p.category}</td>
                 <td className="sizes-col">
                   {p.sizeOptions?.map((s, idx) => (
-                    <span key={idx} className="size-chip">{s.size}: {s.price}</span>
+                    <span key={idx} className="size-chip">{s.size}: {s.price?.toLocaleString()}</span>
                   ))}
                 </td>
                 <td className="actions">
@@ -136,6 +136,10 @@ const ProductManagement = () => {
                 <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
                   <option>Heavy Duty</option>
                   <option>Standard</option>
+                  <option>Moko</option>
+                  <option>Superfoam</option>
+                  <option>Johari Fibre</option>
+                  <option>Bed Base</option>
                   <option>Pillow</option>
                 </select>
                 <input type="text" placeholder="Thickness (e.g. 8-inch)" value={formData.thickness} onChange={e => setFormData({...formData, thickness: e.target.value})} />

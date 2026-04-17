@@ -35,3 +35,18 @@
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 768px) {
+  .floating-whatsapp {
+    bottom: 1.25rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+  .whatsapp-label {
+    display: none;
+  }
+  .whatsapp-icon {
+    background: transparent;
+  }
+}
