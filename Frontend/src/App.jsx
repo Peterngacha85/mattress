@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Admin/Login';
 import AdminDashboard from './pages/Admin/Dashboard';
 import Cart from './pages/Cart';
+import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import FloatingAudio from './components/FloatingAudio';
@@ -48,6 +49,8 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          {/* Catch-all 404 Route */}
+          <Route path="*" element={<ClientLayout><NotFound /></ClientLayout>} />
         </Routes>
         {/* Floating buttons at root level to guarantee fixed positioning */}
         <FloatingAudio />

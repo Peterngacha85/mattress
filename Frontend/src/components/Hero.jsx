@@ -34,6 +34,18 @@ const Hero = () => {
     backgroundImage: `url("${bgImage}")`
   };
 
+  const handleWhatsAppClick = () => {
+    const message = "Hello, I'm interested in Kisau Mattresses. Could you help me with a purchase?";
+    window.open(`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleExploreClick = () => {
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="hero-section">
       {/* Bulletproof Background Image */}
@@ -76,15 +88,15 @@ const Hero = () => {
 
         {/* Buttons */}
         <div className="hero-actions">
-          <button className="btn-whatsapp-hero">
+          <button className="btn-whatsapp-hero" onClick={handleWhatsAppClick}>
             <Send size={18} /> Order on WhatsApp
           </button>
-          <button className="btn-outline-hero">
+          <button className="btn-outline-hero" onClick={handleExploreClick}>
             Explore Products
           </button>
         </div>
 
-        <div className="scroll-arrow">
+        <div className="scroll-arrow" onClick={handleExploreClick} style={{ cursor: 'pointer' }}>
           <ChevronDown size={32} />
         </div>
       </div>
