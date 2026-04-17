@@ -1,0 +1,125 @@
+.cart-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.cart-modal-content {
+  background: var(--bg-card);
+  width: 90%;
+  max-width: 450px;
+  padding: 2rem;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-modal-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.added-product-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.added-product-preview img {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.added-product-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.added-product-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.cart-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn-checkout-modal {
+  background: var(--primary);
+  color: white;
+  padding: 1rem;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  display: block;
+}
+
+.btn-checkout-modal:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.btn-continue-modal {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-continue-modal:hover {
+  background: var(--border);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

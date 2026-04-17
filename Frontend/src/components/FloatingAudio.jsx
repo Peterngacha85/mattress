@@ -11,11 +11,44 @@ const FloatingAudio = () => {
 
   const tracks = settings?.audioTracks || [];
 
+  // Attempt to play on mount (or when tracks load)
+  useEffect(() => {
+    if (tracks.length > 0) {
+      const playAudio = () => {
+        audioRef.current?.play()
+          .then(() => setIsPlaying(true))
+          .catch(() => {
+            console.log("Autoplay blocked, waiting for interaction...");
+          });
+      };
+
+      playAudio();
+
+      // Fallback: Start audio on first user interaction if blocked
+      const handleFirstInteraction = () => {
+        if (!isPlaying) {
+          playAudio();
+        }
+        window.removeEventListener('click', handleFirstInteraction);
+        window.removeEventListener('touchstart', handleFirstInteraction);
+      };
+
+      window.addEventListener('click', handleFirstInteraction);
+      window.addEventListener('touchstart', handleFirstInteraction);
+
+      return () => {
+        window.removeEventListener('click', handleFirstInteraction);
+        window.removeEventListener('touchstart', handleFirstInteraction);
+      };
+    }
+  }, [tracks]);
+
+  // Handle track changes
   useEffect(() => {
     if (tracks.length > 0 && isPlaying) {
       audioRef.current?.play().catch(e => console.log("Audio play failed:", e));
     }
-  }, [currentTrackIndex, tracks]);
+  }, [currentTrackIndex]);
 
   const togglePlay = () => {
     if (isPlaying) {

@@ -12,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import FloatingAudio from './components/FloatingAudio';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import CartPopup from './components/CartPopup';
 
 // Client Layout: Includes Navbar only
 const ClientLayout = ({ children }) => (
@@ -55,6 +56,7 @@ function App() {
         {/* Floating buttons at root level to guarantee fixed positioning */}
         <FloatingAudio />
         <FloatingWhatsApp />
+        <CartPopup />
         <Toaster position="top-right" />
       </Router>
     </AppProvider>

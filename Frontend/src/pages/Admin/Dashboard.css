@@ -101,9 +101,14 @@
   transition: var(--transition);
 }
 
+.stat-card.clickable {
+  cursor: pointer;
+}
+
 .stat-card:hover {
   border-color: var(--primary);
   transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1);
 }
 
 .stat-card.highlight {

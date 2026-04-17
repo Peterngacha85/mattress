@@ -13,6 +13,8 @@ export const AppProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem('kisau_theme') || 'dark');
+  const [isCartPopupOpen, setIsCartPopupOpen] = useState(false);
+  const [lastAddedItem, setLastAddedItem] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('kisau_theme', theme);
@@ -66,7 +68,11 @@ export const AppProvider = ({ children }) => {
       }
       return [...prev, { ...product, size: selectedSize, price: selectedPrice, quantity: 1 }];
     });
+    setLastAddedItem({ ...product, size: selectedSize, price: selectedPrice });
+    setIsCartPopupOpen(true);
   };
+
+  const closeCartPopup = () => setIsCartPopupOpen(false);
 
   const removeFromCart = (productId, size) => {
     setCart(prev => prev.filter(item => !(item._id === productId && item.size === size)));
@@ -85,7 +91,8 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider value={{ 
       products, settings, loading, 
       cart, addToCart, removeFromCart, updateQuantity, clearCart,
-      fetchData, theme, toggleTheme
+      fetchData, theme, toggleTheme,
+      isCartPopupOpen, lastAddedItem, closeCartPopup
     }}>
       {children}
     </AppContext.Provider>

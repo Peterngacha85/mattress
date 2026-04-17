@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Package, Settings, LogOut, LayoutDashboard } from 'lucide-react';
+import { Package, Settings, LogOut, LayoutDashboard, ClipboardList, ListTree } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import SettingsManagement from './SettingsManagement';
 import api from '../../services/api';
@@ -32,21 +32,21 @@ const AdminOverview = () => {
       <p>Welcome back! Here is a summary of your site's current status.</p>
       
       <div className="stats-grid">
-        <div className="stat-card">
+        <div className="stat-card clickable" onClick={() => navigate('/kisauadminmattress/products')}>
           <Package className="stat-icon" />
           <div className="stat-info">
             <h3>{stats?.totalProducts || 0}</h3>
             <span>Total Products</span>
           </div>
         </div>
-        <div className="stat-card">
-          <LayoutDashboard className="stat-icon" />
+        <div className="stat-card clickable" onClick={() => navigate('/kisauadminmattress/categories')}>
+          <ListTree className="stat-icon" />
           <div className="stat-info">
             <h3>{stats?.totalCategories || 0}</h3>
             <span>Categories</span>
           </div>
         </div>
-        <div className="stat-card highlight">
+        <div className="stat-card highlight clickable" onClick={() => navigate('/kisauadminmattress/settings')}>
           <Settings className="stat-icon" />
           <div className="stat-info">
             <h3>Live</h3>
@@ -96,6 +96,14 @@ const Dashboard = () => {
             <Package size={20} />
             <span>Products</span>
           </Link>
+          <Link to="/kisauadminmattress/inventory" className={`nav-item ${isActive('inventory') ? 'active' : ''}`}>
+            <ClipboardList size={20} />
+            <span>Inventory</span>
+          </Link>
+          <Link to="/kisauadminmattress/categories" className={`nav-item ${isActive('categories') ? 'active' : ''}`}>
+            <ListTree size={20} />
+            <span>Categories</span>
+          </Link>
           <Link to="/kisauadminmattress/settings" className={`nav-item ${isActive('settings') ? 'active' : ''}`}>
             <Settings size={20} />
             <span>Settings</span>
@@ -111,6 +119,8 @@ const Dashboard = () => {
         <Routes>
           <Route path="dashboard" element={<AdminOverview />} />
           <Route path="products" element={<ProductManagement />} />
+          <Route path="inventory" element={<div className="overview-page"><h1>Inventory <span>Management</span></h1><ProductManagement view="inventory" /></div>} />
+          <Route path="categories" element={<div className="overview-page"><h1>Product <span>Categories</span></h1><ProductManagement view="categories" /></div>} />
           <Route path="settings" element={<SettingsManagement />} />
         </Routes>
       </main>

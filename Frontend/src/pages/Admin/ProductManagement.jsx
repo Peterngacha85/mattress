@@ -4,11 +4,12 @@ import toast from 'react-hot-toast';
 import api from '../../services/api';
 import './ProductManagement.css';
 
-const ProductManagement = () => {
+const ProductManagement = ({ view = 'all' }) => {
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [filterCategory, setFilterCategory] = useState('All');
   
   // Updated initial form state for sizeOptions
   const initialForm = {
@@ -23,6 +24,10 @@ const ProductManagement = () => {
   };
 
   useEffect(() => { fetchProducts(); }, []);
+
+  const filteredProducts = view === 'categories' && filterCategory !== 'All' 
+    ? products.filter(p => p.category === filterCategory)
+    : products;
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -40,7 +45,6 @@ const ProductManagement = () => {
     }
   };
 
-  // Logic to handle multiple sizes
   const addSizeOption = () => {
     setFormData({ ...formData, sizeOptions: [...formData.sizeOptions, { size: '', price: '' }] });
   };
@@ -82,13 +86,29 @@ const ProductManagement = () => {
     }
   };
 
+  const categories = ['All', 'Heavy Duty', 'Standard', 'Moko', 'Superfoam', 'Johari Fibre', 'Bed Base', 'Pillow'];
+
   return (
     <div className="product-mgmt">
       <div className="mgmt-header">
-        <h2>Manage <span>Products</span></h2>
-        <button className="add-btn" onClick={() => { setEditingProduct(null); setFormData(initialForm); setShowForm(true); }}>
-          <Plus size={20} /> Add Product
-        </button>
+        <h2>
+          {view === 'all' ? 'Manage ' : view === 'inventory' ? 'Inventory ' : 'Category '}
+          <span>{view === 'all' ? 'Products' : view === 'inventory' ? 'Lookup' : 'Filter'}</span>
+        </h2>
+        
+        {view === 'all' && (
+          <button className="add-btn" onClick={() => { setEditingProduct(null); setFormData(initialForm); setShowForm(true); }}>
+            <Plus size={20} /> Add Product
+          </button>
+        )}
+
+        {view === 'categories' && (
+          <div className="category-filter">
+            <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+              {categories.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className="product-table-container">
@@ -98,25 +118,29 @@ const ProductManagement = () => {
               <th>Image</th>
               <th>Name</th>
               <th>Category</th>
+              {view === 'inventory' && <th>Thickness</th>}
               <th>Sizes/Prices</th>
-              <th>Actions</th>
+              {view === 'all' && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
-            {products.map(p => (
+            {filteredProducts.map(p => (
               <tr key={p._id}>
                 <td><img src={p.image} className="table-img" alt={p.name} /></td>
                 <td>{p.name}</td>
                 <td>{p.category}</td>
+                {view === 'inventory' && <td>{p.thickness || 'N/A'}</td>}
                 <td className="sizes-col">
                   {p.sizeOptions?.map((s, idx) => (
                     <span key={idx} className="size-chip">{s.size}: {s.price?.toLocaleString()}</span>
                   ))}
                 </td>
-                <td className="actions">
-                  <button onClick={() => { setEditingProduct(p); setFormData(p); setShowForm(true); }}><Edit size={18} /></button>
-                  <button onClick={() => deleteProduct(p._id)} className="delete"><Trash2 size={18} /></button>
-                </td>
+                {view === 'all' && (
+                  <td className="actions">
+                    <button onClick={() => { setEditingProduct(p); setFormData(p); setShowForm(true); }}><Edit size={18} /></button>
+                    <button onClick={() => deleteProduct(p._id)} className="delete"><Trash2 size={18} /></button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
