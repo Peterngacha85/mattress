@@ -41,30 +41,10 @@ app.get('/api/health', (req, res) => {
     res.send('Kisau Mattress API is running...');
 });
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-    // Check possible locations for the dist folder
-    const siblingDist = path.join(__dirname, '../Frontend/dist');
-    const localDist = path.join(__dirname, './dist');
-    
-    const distPath = require('fs').existsSync(localDist) ? localDist : siblingDist;
-
-    app.use(express.static(distPath));
-
-    // Homepage
-    app.get('/', (req, res) =>
-        res.sendFile(path.resolve(distPath, 'index.html'))
-    );
-
-    // Any other route (for SPA)
-    app.get('/*path', (req, res) =>
-        res.sendFile(path.resolve(distPath, 'index.html'))
-    );
-} else {
-    app.get('/', (req, res) => {
-        res.send('API is running in development mode...');
-    });
-}
+// Root Route
+app.get('/', (req, res) => {
+    res.send('Kisau Mattress API is running...');
+});
 
 // Error Handling Middleware
 app.use(notFound);
