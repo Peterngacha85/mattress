@@ -58,6 +58,15 @@
   color: var(--text-muted);
 }
 
+.feature-icon {
+  color: var(--primary);
+  transition: var(--transition);
+}
+
+.feature-card:hover .feature-icon {
+  color: white;
+}
+
 .products-section {
   padding: 8rem 0;
   background: #080808;
