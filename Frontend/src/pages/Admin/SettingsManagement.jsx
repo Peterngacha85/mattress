@@ -117,12 +117,12 @@ const SettingsManagement = () => {
               />
             </div>
             <div className="form-group">
-              <label>Shop Location Address</label>
+              <label>Shop Location (Name or Google Maps Link)</label>
               <input 
                 type="text" 
                 value={settings.mapLocation} 
                 onChange={e => setSettings({...settings, mapLocation: e.target.value})}
-                placeholder="Street, City, Country"
+                placeholder="e.g. Ruiru, Kenya OR https://share.google/..."
               />
             </div>
             
