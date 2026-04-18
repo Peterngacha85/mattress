@@ -19,6 +19,7 @@ const FloatingAudio = () => {
   const { settings } = useAppContext();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+  const hasUserInteracted = useRef(false);
 
   // Use only the first available track (no looping through multiple)
   const track = settings?.audioTracks?.[0];
@@ -26,15 +27,24 @@ const FloatingAudio = () => {
   // Attempt to autoplay on first user interaction
   useEffect(() => {
     if (!track) return;
+    
+    // We only want to auto-play once
+    if (hasUserInteracted.current) return;
 
-    const playAudio = async () => {
-      if (isPlaying) return;
+    const tryAutoPlay = async () => {
       try {
         await audioRef.current?.play();
         setIsPlaying(true);
+        hasUserInteracted.current = true;
         cleanupListeners();
-      } catch (e) {
+      } catch (err) {
         console.log("Autoplay blocked, waiting for interaction...");
+      }
+    };
+
+    const handleInteraction = () => {
+      if (!hasUserInteracted.current) {
+        tryAutoPlay();
       }
     };
 
@@ -44,12 +54,8 @@ const FloatingAudio = () => {
       });
     };
 
-    const handleInteraction = () => {
-      playAudio();
-    };
-
     // Initial attempt
-    playAudio();
+    tryAutoPlay();
 
     // Fallback: Start audio on hard interaction
     ['click', 'touchstart', 'keyup'].forEach(event => {
@@ -57,9 +63,11 @@ const FloatingAudio = () => {
     });
 
     return () => cleanupListeners();
-  }, [track, isPlaying]);
+  }, [track]);
 
-  const togglePlay = () => {
+  const togglePlay = (e) => {
+    e.stopPropagation(); // prevent window interaction listeners from grabbing this
+    hasUserInteracted.current = true;
     if (isPlaying) {
       audioRef.current.pause();
     } else {
