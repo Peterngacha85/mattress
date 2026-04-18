@@ -1,18 +1,19 @@
 .floating-audio {
   position: fixed;
   bottom: 2rem;
-  left: 1rem !important;
+  left: 1.5rem !important;
   right: auto !important;
   z-index: 9999;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
 }
 
-.music-icon {
+.audio-play-btn {
   width: 50px;
   height: 50px;
   background: var(--primary);
+  border: none;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -23,11 +24,12 @@
   transition: var(--transition);
 }
 
-.music-icon:hover {
+.audio-play-btn:hover {
   transform: scale(1.1);
+  background: var(--primary-dark);
 }
 
-.music-icon.pulse {
+.audio-play-btn.playing {
   animation: pulse-red 2s infinite;
 }
 
@@ -37,53 +39,12 @@
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
-.audio-controls {
-  position: absolute;
-  bottom: 3.5rem;
-  left: 0;
-  background: var(--bg-card);
-  padding: 0.5rem 1rem;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: var(--transition);
-  border: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-.floating-audio:hover .audio-controls,
-.audio-controls.active {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.audio-btn {
-  color: var(--text-main);
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.audio-btn:hover {
-  color: var(--primary);
-}
-
-.audio-btn.main {
-  background: var(--border);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-}
 @media (max-width: 768px) {
   .floating-audio {
     bottom: 1.25rem;
-    left: 1rem;
+    left: 1rem !important;
   }
-  .music-icon {
+  .audio-play-btn {
     width: 44px;
     height: 44px;
   }

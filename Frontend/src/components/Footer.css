@@ -92,3 +92,23 @@
     gap: 2.5rem;
   }
 }
+
+.btn-whatsapp-footer {
+  margin-top: 1.5rem;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-whatsapp-footer:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+

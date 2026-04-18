@@ -1,61 +1,63 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Music, Pause, Play, SkipForward, SkipBack } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import './FloatingAudio.css';
+
+const PlayIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="none">
+    <polygon points="5 3 19 12 5 21 5 3"/>
+  </svg>
+);
+
+const PauseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="none">
+    <rect x="6" y="4" width="4" height="16"/>
+    <rect x="14" y="4" width="4" height="16"/>
+  </svg>
+);
 
 const FloatingAudio = () => {
   const { settings } = useAppContext();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const audioRef = useRef(null);
 
-  const tracks = settings?.audioTracks || [];
+  // Use only the first available track (no looping through multiple)
+  const track = settings?.audioTracks?.[0];
 
-  // Attempt to play on mount (or when tracks load)
+  // Attempt to autoplay on first user interaction
   useEffect(() => {
-    if (tracks.length > 0) {
-      const playAudio = async () => {
-        if (isPlaying) return true; // Already playing
-        try {
-          await audioRef.current?.play();
-          setIsPlaying(true);
-          // Success! Remove all listeners
-          cleanupListeners();
-          return true;
-        } catch (e) {
-          console.log("Autoplay blocked, wait for hard interaction...");
-          return false;
-        }
-      };
+    if (!track) return;
 
-      const cleanupListeners = () => {
-        ['click', 'touchstart', 'keyup'].forEach(event => {
-          window.removeEventListener(event, handleInteraction);
-        });
-      };
+    const playAudio = async () => {
+      if (isPlaying) return;
+      try {
+        await audioRef.current?.play();
+        setIsPlaying(true);
+        cleanupListeners();
+      } catch (e) {
+        console.log("Autoplay blocked, waiting for interaction...");
+      }
+    };
 
-      const handleInteraction = () => {
-        playAudio();
-      };
-
-      // Initial attempt
-      playAudio();
-
-      // Fallback: Start audio on hard interaction
+    const cleanupListeners = () => {
       ['click', 'touchstart', 'keyup'].forEach(event => {
-        window.addEventListener(event, handleInteraction);
+        window.removeEventListener(event, handleInteraction);
       });
+    };
 
-      return () => cleanupListeners();
-    }
-  }, [tracks, isPlaying]); // Watch isPlaying to ensure cleanup is robust
+    const handleInteraction = () => {
+      playAudio();
+    };
 
-  // Handle track changes
-  useEffect(() => {
-    if (tracks.length > 0 && isPlaying) {
-      audioRef.current?.play().catch(e => console.log("Audio play failed:", e));
-    }
-  }, [currentTrackIndex]);
+    // Initial attempt
+    playAudio();
+
+    // Fallback: Start audio on hard interaction
+    ['click', 'touchstart', 'keyup'].forEach(event => {
+      window.addEventListener(event, handleInteraction);
+    });
+
+    return () => cleanupListeners();
+  }, [track, isPlaying]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -66,35 +68,23 @@ const FloatingAudio = () => {
     setIsPlaying(!isPlaying);
   };
 
-  const nextTrack = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % tracks.length);
-  };
-
-  const prevTrack = () => {
-    setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length);
-  };
-
-  if (tracks.length === 0) return null;
+  if (!track) return null;
 
   return (
     <div className="floating-audio">
       <audio 
         ref={audioRef} 
-        src={tracks[currentTrackIndex]?.url} 
-        onEnded={nextTrack}
+        src={track.url} 
+        loop
       />
       
-      <div className={`audio-controls ${isPlaying ? 'active' : ''}`}>
-        <button onClick={prevTrack} className="audio-btn small"><SkipBack size={16} /></button>
-        <button onClick={togglePlay} className="audio-btn main">
-          {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-        </button>
-        <button onClick={nextTrack} className="audio-btn small"><SkipForward size={16} /></button>
-      </div>
-
-      <div className={`music-icon ${isPlaying ? 'pulse' : ''}`} onClick={togglePlay}>
-        <Music size={24} />
-      </div>
+      <button 
+        className={`audio-play-btn ${isPlaying ? 'playing' : ''}`} 
+        onClick={togglePlay}
+        aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+      >
+        {isPlaying ? <PauseIcon /> : <PlayIcon />}
+      </button>
     </div>
   );
 };

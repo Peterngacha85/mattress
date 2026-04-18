@@ -10,6 +10,7 @@ const storage = new CloudinaryStorage({
             folder: 'kisau_mattress',
             resource_type: isAudio ? 'video' : 'image', // Cloudinary uses 'video' for audio files
             allowed_formats: isAudio ? ['mp3', 'wav', 'ogg'] : ['jpg', 'png', 'jpeg', 'webp'],
+            transformation: isAudio ? [] : [{ fetch_format: 'auto', quality: 'auto' }]
         };
     },
 });
