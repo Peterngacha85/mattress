@@ -184,6 +184,9 @@
 }
 
 @media (max-width: 992px) {
+  .about-section {
+    padding-bottom: 12rem; /* Add extra space for the overlapping card */
+  }
   .about-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
@@ -191,10 +194,18 @@
   .about-text {
     padding-right: 0;
   }
+  .about-image-collage {
+    grid-template-columns: 1fr; /* Stack images on mobile for better visibility */
+    max-width: 400px;
+    margin: 0 auto;
+  }
   .about-team-card {
     transform: translate(-50%, 0);
     top: auto;
-    bottom: -20px;
+    bottom: -60px; /* Push it down further */
+    left: 50%;
+    max-width: 90%;
+    width: 280px;
   }
 }
 
