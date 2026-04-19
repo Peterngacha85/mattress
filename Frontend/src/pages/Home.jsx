@@ -80,10 +80,9 @@ const Home = () => {
               </button>
             </div>
             <div className="about-image-collage">
-              {/* Using same image thrice for collage layout effect similar to design */}
               <div className="img-container"><img src="/images/products/about-mattress.png" alt="Our team" /></div>
-              <div className="img-container"><img src="/images/products/about-mattress.png" alt="Our team" /></div>
-              <div className="img-container"><img src="/images/products/about-mattress.png" alt="Our team" /></div>
+              <div className="img-container"><img src="/images/products/mattress_2.png" alt="Showroom" /></div>
+              <div className="img-container"><img src="/images/site/WhatsApp Image 2026-04-17 at 19.54.04.jpeg" alt="Mattress setup" /></div>
               
               <div className="about-team-card">
                 <h3>Our Team</h3>
