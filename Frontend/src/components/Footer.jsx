@@ -36,7 +36,23 @@ const Footer = () => {
               <ul>
                 <li><Phone size={18} /> {settings.whatsappNumber}</li>
                 <li><Mail size={18} /> info@kisaumattress.co.ke</li>
-                <li><MapPin size={18} /> {settings.mapLocation}</li>
+                <li>
+                  <MapPin size={18} /> 
+                  {settings.mapLocation && (settings.mapLocation.startsWith('http') || settings.mapLocation.includes('goo.gl')) ? (
+                    <a 
+                      href={settings.mapLocation.includes('<iframe') ? '#' : settings.mapLocation} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="footer-map-link"
+                    >
+                      {settings.mapLocation.includes('/place/') 
+                        ? decodeURIComponent(settings.mapLocation.split('/place/')[1].split('/')[0].replace(/\+/g, ' '))
+                        : 'View Our Location'}
+                    </a>
+                  ) : (
+                    settings.mapLocation || 'Ruiru, Kenya'
+                  )}
+                </li>
               </ul>
               
               <button className="btn-whatsapp-footer" onClick={() => window.open(`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent("Hello, I need assistance with Kisau Mattresses.")}`, '_blank')}>
