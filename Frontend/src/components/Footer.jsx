@@ -45,12 +45,10 @@ const Footer = () => {
                       rel="noopener noreferrer"
                       className="footer-map-link"
                     >
-                      {settings.mapLocation.includes('/place/') 
-                        ? decodeURIComponent(settings.mapLocation.split('/place/')[1].split('/')[0].replace(/\+/g, ' '))
-                        : 'View Our Location'}
+                      Ruiru, Kiambu Road, Opposite Shell Petrol Station, next to Penta, Mabati
                     </a>
                   ) : (
-                    settings.mapLocation || 'Ruiru, Kenya'
+                    settings.mapLocation || 'Ruiru, Kiambu Road, Opposite Shell Petrol Station, next to Penta, Mabati'
                   )}
                 </li>
               </ul>
