@@ -12,13 +12,14 @@ const ProductGrid = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100000]);
 
-  const categories = ['Heavy Duty Quilted', 'Superfoam Morning Glory', 'Moko', 'Johari Fibre', 'Orthopedic', 'Bed Base', 'Pillows'];
-  const types = ['High-Density', 'Memory Foam', 'Medium Duty', 'Orthopedic', 'Heavy Duty', 'Furniture'];
+  // Dynamically collect unique categories and types from the actual product data
+  const categories = ['ALL', ...new Set(products.map(p => p.category))].sort((a, b) => a === 'ALL' ? -1 : b === 'ALL' ? 1 : a.localeCompare(b));
+  const types = ['All', ...new Set(products.map(p => p.type))].sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
   
   // Dynamically collect all thicknesses from product variants
   const allThicknesses = [...new Set(
     products.flatMap(p => (p.variants || []).map(v => v.thickness))
-  )].filter(t => t && t !== 'Standard');
+  )].filter(t => t && t !== 'Standard').sort();
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -138,7 +139,7 @@ const ProductGrid = () => {
 
       {/* Main Category Tabs (Shortcut) */}
       <div className="category-scroll hide-scrollbar">
-        {categories.slice(0, 6).map(cat => (
+        {categories.filter(c => c !== 'ALL').slice(0, 8).map(cat => (
           <button 
             key={cat} 
             className={`tab-btn ${activeCategory === cat ? 'active' : ''}`}
