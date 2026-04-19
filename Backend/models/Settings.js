@@ -10,6 +10,9 @@ const settingsSchema = new mongoose.Schema({
     whatsappNumber: { type: String, default: '0716462683' },
     mapLocation: { type: String, default: 'Ruiru, Kenya' },
     heroBgImage: { type: String }, // New dynamic hero background
+    aboutImage1: { type: String }, // About collage Image 1
+    aboutImage2: { type: String }, // About collage Image 2
+    aboutImage3: { type: String }, // About collage Image 3
     audioTracks: [audioTrackSchema]
 }, { timestamps: true });
 
