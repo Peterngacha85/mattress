@@ -9,17 +9,9 @@ const seedData = async () => {
         await connectDB();
         
         await Product.deleteMany({});
-        await Settings.deleteMany({});
-
-        const settings = new Settings({
-            whatsappNumber: '254792581067',
-            mapLocation: 'Ruiru, Nairobi - Kenya',
-            heroBgImage: '/images/products/hero-bg.jpg',
-            audioTracks: [
-                { title: 'Relaxing Sleep', url: 'https://audio.jukehost.co.uk/HLHIgWNBh4xMdiQaauu5iCebqm56vPsE', publicId: 'track_1' }
-            ]
-        });
-        await settings.save();
+        // We keep Settings as they are likely configured already, 
+        // but if someone wants a full reset, they can uncomment the line below:
+        // await Settings.deleteMany({});
 
         const products = [
             {
@@ -40,7 +32,7 @@ const seedData = async () => {
                     },
                     {
                         thickness: "10 Inches",
-                        image: "/images/products/mattress_3.png",
+                        image: "/images/products/mattress_2.png", // Different image to test swap
                         sizes: [
                             { size: "3x6", price: 15500 },
                             { size: "4x6", price: 21500 },
@@ -69,7 +61,7 @@ const seedData = async () => {
                     },
                     {
                         thickness: "8 Inches",
-                        image: "/images/products/mattress_2.png",
+                        image: "/images/products/mattress_1.png", // Different image to test swap
                         sizes: [
                             { size: "3x6", price: 7500 },
                             { size: "4x6", price: 9500 },
@@ -97,7 +89,7 @@ const seedData = async () => {
                     },
                     {
                         thickness: "10 Inches",
-                        image: "/images/products/mattress_1.png",
+                        image: "/images/products/about-mattress.png", // Different image to test swap
                         sizes: [
                             { size: "3x6", price: 19500 },
                             { size: "4x6", price: 24500 },
@@ -126,7 +118,7 @@ const seedData = async () => {
                     },
                     {
                         thickness: "12 Inches",
-                        image: "/images/products/mattress_3.png",
+                        image: "/images/products/mattress_2.png", // Different image to test swap
                         sizes: [
                             { size: "3x6", price: 35000 },
                             { size: "4x6", price: 42000 },
@@ -137,10 +129,10 @@ const seedData = async () => {
                 ]
             },
             {
-                name: "Premium Bed Base (Dark Wood)",
+                name: "Premium Bed Base",
                 category: "Bed Base",
                 type: "Furniture",
-                description: "Solid dark wood bed base, perfectly built to last and support any mattress type.",
+                description: "Solid bed base built to last.",
                 variants: [
                     {
                         thickness: "Standard",
@@ -153,27 +145,11 @@ const seedData = async () => {
                         ]
                     }
                 ]
-            },
-            {
-                name: "Soft Cloud Pillow",
-                category: "Pillow",
-                type: "Accessory",
-                description: "Luxurious soft cloud pillow for that extra touch of comfort.",
-                variants: [
-                    {
-                        thickness: "Standard",
-                        image: "/images/products/mattress_1.png",
-                        sizes: [
-                            { size: "Standard", price: 1500 },
-                            { size: "King", price: 2500 }
-                        ]
-                    }
-                ]
             }
         ];
 
         await Product.insertMany(products);
-        console.log("Database Seeded Successfully with Variant-Based Products!");
+        console.log("Database Seeded with test-ready variants!");
         process.exit();
     } catch (error) {
         console.error("Seeding Error:", error);
