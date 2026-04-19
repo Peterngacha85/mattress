@@ -6,25 +6,31 @@ import './ProductCard.css';
 const ProductCard = ({ product }) => {
   const { addToCart, settings } = useAppContext();
   
-  // Initialize with first variant and first size
-  const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
-  const [selectedSizeIdx, setSelectedSizeIdx] = useState(0);
-
   const variants = product.variants || [];
-  const currentVariant = variants[selectedVariantIdx] || {};
-  const currentSizes = currentVariant.sizes || [];
-  const currentSize = currentSizes[selectedSizeIdx] || {};
-  const displayImage = currentVariant.image || '/images/products/mattress_1.png';
-  const hasMultipleThicknesses = variants.length > 1;
+  
+  // Get unique thickness labels and unique size labels from all variants
+  const uniqueThicknesses = [...new Set(variants.map(v => v.thickness))];
+  const allSizes = [...new Set(variants.flatMap(v => (v.sizes || []).map(s => s.size)))];
 
-  const handleVariantChange = (idx) => {
-    setSelectedVariantIdx(idx);
-    setSelectedSizeIdx(0); // Reset size when thickness changes
-  };
+  const [selectedThickness, setSelectedThickness] = useState(uniqueThicknesses[0] || '');
+  const [selectedSize, setSelectedSize] = useState(allSizes[0] || '');
+
+  // Find the actual variant object based on selected thickness
+  const currentVariant = variants.find(v => v.thickness === selectedThickness) || variants[0] || {};
+  
+  // Find the size options for the currently selected variant
+  const currentVariantSizes = currentVariant.sizes || [];
+  
+  // Find the price for the specifically selected size within this variant
+  // Fallback to the first available size in this variant if the selected size isn't defined here
+  const sizeOption = currentVariantSizes.find(s => s.size === selectedSize) || currentVariantSizes[0] || {};
+  
+  const displayImage = currentVariant.image || '/images/products/mattress_1.png';
+  const hasMultipleThicknesses = uniqueThicknesses.length > 1;
 
   const handleWhatsApp = () => {
-    const thicknessText = currentVariant.thickness !== 'Standard' ? `\nThickness: ${currentVariant.thickness}` : '';
-    const message = `Hello Kisau Mattresses, I'm interested in: ${product.name}${thicknessText}\nSize: ${currentSize.size}\nPrice: KES ${currentSize.price?.toLocaleString()}`;
+    const thicknessText = selectedThickness !== 'Standard' ? `\nThickness: ${selectedThickness}` : '';
+    const message = `Hello Kisau Mattresses, I'm interested in: ${product.name}${thicknessText}\nSize: ${selectedSize}\nPrice: KES ${sizeOption.price?.toLocaleString()}`;
     const whatsappNumber = settings?.whatsappNumber || '254792581067';
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -32,9 +38,9 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = () => {
     addToCart(
       product,
-      currentSize.size,
-      currentSize.price,
-      currentVariant.thickness,
+      selectedSize,
+      sizeOption.price,
+      selectedThickness,
       displayImage
     );
   };
@@ -46,7 +52,7 @@ const ProductCard = ({ product }) => {
       <div className="product-image">
         <img 
           src={displayImage} 
-          alt={`${product.name} - ${currentVariant.thickness}`}
+          alt={`${product.name} - ${selectedThickness}`}
           key={displayImage}
         />
         {product.isFeatured && <div className="featured-tag">Best Seller</div>}
@@ -60,40 +66,44 @@ const ProductCard = ({ product }) => {
         <h3 className="product-title">{product.name}</h3>
         
         <div className="price-tag">
-           <span className="currency">KES</span> {currentSize.price?.toLocaleString()}
+           <span className="currency">KES</span> {sizeOption.price?.toLocaleString()}
         </div>
 
-        {/* Thickness Selector — only shown if multiple variants */}
+        {/* Thickness Selector — Deduplicated */}
         {hasMultipleThicknesses && (
           <div className="thickness-selection">
             <label>Thickness:</label>
             <div className="thickness-grid">
-              {variants.map((variant, idx) => (
+              {uniqueThicknesses.map((th) => (
                 <button 
-                  key={idx}
-                  className={`thickness-btn ${selectedVariantIdx === idx ? 'active' : ''}`}
-                  onClick={() => handleVariantChange(idx)}
+                  key={th}
+                  className={`thickness-btn ${selectedThickness === th ? 'active' : ''}`}
+                  onClick={() => setSelectedThickness(th)}
                 >
-                  {variant.thickness}
+                  {th}
                 </button>
               ))}
             </div>
           </div>
         )}
 
-        {/* Size Selector */}
+        {/* Size Selector — All available sizes for this product */}
         <div className="size-selection">
           <label>Select Size:</label>
           <div className="sizes-grid">
-            {currentSizes.map((option, idx) => (
-              <button 
-                key={idx}
-                className={`size-btn ${selectedSizeIdx === idx ? 'active' : ''}`}
-                onClick={() => setSelectedSizeIdx(idx)}
-              >
-                {option.size}
-              </button>
-            ))}
+            {allSizes.map((size) => {
+              // Check if this specific size exists in the currently selected thickness
+              const existsInThisThickness = currentVariantSizes.some(s => s.size === size);
+              return (
+                <button 
+                  key={size}
+                  className={`size-btn ${selectedSize === size ? 'active' : ''} ${!existsInThisThickness ? 'unavailable' : ''}`}
+                  onClick={() => setSelectedSize(size)}
+                >
+                  {size}
+                </button>
+              );
+            })}
           </div>
         </div>
 
