@@ -10,6 +10,7 @@ const CartPopup = () => {
   if (!isCartPopupOpen || !lastAddedItem) return null;
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const displayImage = lastAddedItem.variantImage || lastAddedItem.image || (lastAddedItem.variants?.[0]?.image);
 
   return (
     <div className="cart-modal-overlay" onClick={closeCartPopup}>
@@ -23,11 +24,14 @@ const CartPopup = () => {
         </div>
 
         <div className="added-product-preview">
-          <img src={lastAddedItem.image} alt={lastAddedItem.name} />
+          <img src={displayImage} alt={lastAddedItem.name} />
           <div className="added-product-info">
             <h3>{lastAddedItem.name}</h3>
+            {lastAddedItem.thickness && lastAddedItem.thickness !== 'Standard' && (
+              <p>Thickness: {lastAddedItem.thickness}</p>
+            )}
             <p>Size: {lastAddedItem.size}</p>
-            <p><strong>KES {lastAddedItem.price.toLocaleString()}</strong></p>
+            <p><strong>KES {lastAddedItem.price?.toLocaleString()}</strong></p>
           </div>
         </div>
 

@@ -117,13 +117,16 @@ const SettingsManagement = () => {
               />
             </div>
             <div className="form-group">
-              <label>Shop Location (Name or Google Maps Link)</label>
+              <label>Shop Location</label>
               <input 
                 type="text" 
                 value={settings.mapLocation} 
                 onChange={e => setSettings({...settings, mapLocation: e.target.value})}
-                placeholder="e.g. Ruiru, Kenya OR https://share.google/..."
+                placeholder="Paste a Google Maps link or type your address"
               />
+              <small style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>
+                Supports: Google Maps links, goo.gl short links, embed iframe code, or plain addresses like "Ruiru, Kenya"
+              </small>
             </div>
             
             <div className="form-group">

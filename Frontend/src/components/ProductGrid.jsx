@@ -10,22 +10,29 @@ const ProductGrid = () => {
   const [activeType, setActiveType] = useState('All');
   const [activeThickness, setActiveThickness] = useState('All');
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [priceRange, setPriceRange] = useState([0, 100000]);
 
   const categories = ['Heavy Duty Quilted', 'Superfoam Morning Glory', 'Moko', 'Johari Fibre', 'Orthopedic', 'Bed Base', 'Pillows'];
   const types = ['High-Density', 'Memory Foam', 'Medium Duty', 'Orthopedic', 'Heavy Duty', 'Furniture'];
-  const thicknesses = ['6 Inches', '8 Inches', '10 Inches', '12 Inches', '14 Inches', 'Other'];
+  
+  // Dynamically collect all thicknesses from product variants
+  const allThicknesses = [...new Set(
+    products.flatMap(p => (p.variants || []).map(v => v.thickness))
+  )].filter(t => t && t !== 'Standard');
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === 'ALL' || product.category === activeCategory;
     const matchesType = activeType === 'All' || product.type === activeType;
-    const matchesThickness = activeThickness === 'All' || product.thickness === activeThickness;
     
-    // Price range logic (checks all size options)
-    const minPrice = Math.min(...product.sizeOptions.map(o => o.price));
-    const maxPrice = Math.max(...product.sizeOptions.map(o => o.price));
+    // Thickness filter: check if any variant matches the selected thickness
+    const matchesThickness = activeThickness === 'All' || 
+      (product.variants || []).some(v => v.thickness === activeThickness);
+    
+    // Price range logic: check all prices across all variants
+    const allPrices = (product.variants || []).flatMap(v => (v.sizes || []).map(s => s.price));
+    const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
     const matchesPrice = minPrice >= priceRange[0] && minPrice <= priceRange[1];
 
     return matchesSearch && matchesCategory && matchesType && matchesThickness && matchesPrice;
@@ -35,7 +42,7 @@ const ProductGrid = () => {
 
   return (
     <div className="collection-wrapper">
-      {/* Advanced Filter Layout (1:1 Match) */}
+      {/* Advanced Filter Layout */}
       <div className="advanced-filter-container">
         <div className="filter-header">
            <div className="search-pill">
@@ -64,7 +71,7 @@ const ProductGrid = () => {
                 className="reset-text-btn" 
                 onClick={() => {
                   setActiveCategory('ALL'); setActiveType('All'); setActiveThickness('All'); 
-                  setSearchTerm(''); setPriceRange([0, 50000]);
+                  setSearchTerm(''); setPriceRange([0, 100000]);
                 }}
               >
                 Reset
@@ -94,7 +101,7 @@ const ProductGrid = () => {
                 <h4>Thickness</h4>
                 <div className="scroll-list">
                   <button className={activeThickness === 'All' ? 'active' : ''} onClick={() => setActiveThickness('All')}>All Thicknesses</button>
-                  {thicknesses.map(th => (
+                  {allThicknesses.map(th => (
                     <button key={th} className={activeThickness === th ? 'active' : ''} onClick={() => setActiveThickness(th)}>{th}</button>
                   ))}
                 </div>
@@ -103,23 +110,23 @@ const ProductGrid = () => {
                  <h4>Price Range (KES)</h4>
                  <div className="price-filter-control">
                     <div className="price-inputs">
-                      <div className="price-input-box">{priceRange[0]}</div>
+                      <div className="price-input-box">{priceRange[0].toLocaleString()}</div>
                       <span>-</span>
-                      <div className="price-input-box">{priceRange[1]}</div>
+                      <div className="price-input-box">{priceRange[1].toLocaleString()}</div>
                     </div>
                     <div className="range-slider-wrapper">
                       <input 
                         type="range" 
                         min="0" 
-                        max="50000" 
-                        step="500"
+                        max="100000" 
+                        step="1000"
                         value={priceRange[1]} 
                         onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
                         className="custom-range-slider"
                       />
                       <div className="range-labels">
                         <span>KES 0</span>
-                        <span>KES 50,000</span>
+                        <span>KES 100,000</span>
                       </div>
                     </div>
                  </div>

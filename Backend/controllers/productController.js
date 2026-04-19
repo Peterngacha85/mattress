@@ -33,9 +33,11 @@ const productController = {
     deleteProduct: async (req, res) => {
         try {
             const product = await Product.findById(req.params.id);
-            if (product && product.image) {
-                // Optionally delete from cloudinary
-                // await cloudinary.uploader.destroy(publicId);
+            if (product && product.variants) {
+                // Optionally delete variant images from cloudinary
+                // for (const v of product.variants) {
+                //     if (v.image) await cloudinary.uploader.destroy(publicId);
+                // }
             }
             await Product.findByIdAndDelete(req.params.id);
             res.json({ message: 'Product deleted' });
@@ -55,10 +57,23 @@ const productController = {
                 { $group: { _id: '$category', count: { $sum: 1 } } }
             ]);
 
+            // Get total variants count and price range
+            const priceStats = await Product.aggregate([
+                { $unwind: '$variants' },
+                { $unwind: '$variants.sizes' },
+                { $group: {
+                    _id: null,
+                    totalVariants: { $sum: 1 },
+                    minPrice: { $min: '$variants.sizes.price' },
+                    maxPrice: { $max: '$variants.sizes.price' }
+                }}
+            ]);
+
             res.json({
                 totalProducts,
                 totalCategories,
-                categoryDistribution
+                categoryDistribution,
+                priceRange: priceStats[0] || { totalVariants: 0, minPrice: 0, maxPrice: 0 }
             });
         } catch (error) {
             res.status(500).json({ message: error.message });

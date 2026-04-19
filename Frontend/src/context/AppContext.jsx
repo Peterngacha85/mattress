@@ -56,20 +56,33 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => { fetchData(); }, []);
 
-  const addToCart = (product, selectedSize, selectedPrice) => {
+  const addToCart = (product, selectedSize, selectedPrice, selectedThickness, variantImage) => {
     setCart(prev => {
-      // Check if item with same size already exists
-      const existing = prev.find(item => item._id === product._id && item.size === selectedSize);
+      // Check if item with same size and thickness already exists
+      const existing = prev.find(item => item._id === product._id && item.size === selectedSize && item.thickness === selectedThickness);
       if (existing) {
         return prev.map(item => 
-          (item._id === product._id && item.size === selectedSize) 
+          (item._id === product._id && item.size === selectedSize && item.thickness === selectedThickness) 
             ? { ...item, quantity: item.quantity + 1 } 
             : item
         );
       }
-      return [...prev, { ...product, size: selectedSize, price: selectedPrice, quantity: 1 }];
+      return [...prev, { 
+        ...product, 
+        size: selectedSize, 
+        price: selectedPrice, 
+        thickness: selectedThickness,
+        variantImage: variantImage,
+        quantity: 1 
+      }];
     });
-    setLastAddedItem({ ...product, size: selectedSize, price: selectedPrice });
+    setLastAddedItem({ 
+      ...product, 
+      size: selectedSize, 
+      price: selectedPrice, 
+      thickness: selectedThickness,
+      variantImage: variantImage
+    });
     setIsCartPopupOpen(true);
   };
 

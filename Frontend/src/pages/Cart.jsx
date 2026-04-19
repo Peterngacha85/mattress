@@ -23,7 +23,8 @@ const Cart = () => {
 
     let message = "🛒 *Order Inquiry - Kisau Mattresses*\n\n";
     cart.forEach(item => {
-      message += `• ${item.name}\n  Size: *${item.size}*\n  Qty: ${item.quantity}\n  Price: ${formatPrice(item.price * item.quantity)}\n\n`;
+      const thicknessLine = item.thickness && item.thickness !== 'Standard' ? `  Thickness: *${item.thickness}*\n` : '';
+      message += `• ${item.name}\n${thicknessLine}  Size: *${item.size}*\n  Qty: ${item.quantity}\n  Price: ${formatPrice(item.price * item.quantity)}\n\n`;
     });
     message += `💰 *Total: ${formatPrice(total)}*\n\n`;
     message += "Is this order available for delivery?";
@@ -65,13 +66,16 @@ const Cart = () => {
             </div>
             <div className="cart-items">
               {cart.map((item) => (
-                <div key={`${item._id}-${item.size}`} className="cart-item">
+                <div key={`${item._id}-${item.thickness}-${item.size}`} className="cart-item">
                   <div className="item-main">
                     <div className="item-image">
-                      <img src={item.image} alt={item.name} />
+                      <img src={item.variantImage || item.image || (item.variants?.[0]?.image)} alt={item.name} />
                     </div>
                     <div className="item-info">
                       <h3 className="product-title">{item.name}</h3>
+                      {item.thickness && item.thickness !== 'Standard' && (
+                        <p className="item-variant">Thickness: <span>{item.thickness}</span></p>
+                      )}
                       <p className="item-variant">Size: <span>{typeof item.size === 'object' ? item.size.size : item.size}</span></p>
                       <p className="item-price-unit">{formatPrice(item.price)}</p>
                       <button className="remove-link" onClick={() => removeFromCart(item._id, item.size)}>

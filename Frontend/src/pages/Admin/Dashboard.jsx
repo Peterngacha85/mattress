@@ -9,6 +9,7 @@ import './Dashboard.css';
 const AdminOverview = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStats = async () => {
