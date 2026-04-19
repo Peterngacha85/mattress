@@ -20,6 +20,8 @@ const allowedOrigins = [
     'https://mattress-nine.vercel.app',
     'https://www.kisaumattresscenter.co.ke',
     'https://kisaumattresscenter.co.ke',
+    'https://www.kisaumattresscentre.co.ke',
+    'https://kisaumattresscentre.co.ke',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
