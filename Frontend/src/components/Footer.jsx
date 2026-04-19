@@ -1,10 +1,18 @@
-import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import './Footer.css';
 
 const Footer = () => {
   const { settings } = useAppContext();
+  const location = useLocation();
+
+  const handleHomeClick = (e) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <footer className="main-footer">
@@ -24,7 +32,7 @@ const Footer = () => {
             <div className="footer-links">
               <h3>Quick Links</h3>
               <ul>
-                <li><a href="#hero">Home</a></li>
+                <li><Link to="/" onClick={handleHomeClick}>Home</Link></li>
                 <li><a href="#products">Collection</a></li>
                 <li><a href="#about">About us</a></li>
                 <li><a href="#contact">Contact</a></li>
