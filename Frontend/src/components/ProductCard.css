@@ -185,11 +185,15 @@
 }
 
 .size-btn.unavailable {
-  opacity: 0.3;
-  cursor: not-allowed;
+  opacity: 0.5;
+  cursor: pointer;
   background: rgba(255, 255, 255, 0.05);
   border-style: dashed;
-  pointer-events: none;
+}
+
+.size-btn.unavailable:hover {
+  border-color: var(--primary);
+  opacity: 1;
 }
 
 /* Actions */
