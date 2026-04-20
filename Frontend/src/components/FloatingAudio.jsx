@@ -24,46 +24,7 @@ const FloatingAudio = () => {
   // Use only the first available track (no looping through multiple)
   const track = settings?.audioTracks?.[0];
 
-  // Attempt to autoplay on first user interaction
-  useEffect(() => {
-    if (!track) return;
-    
-    // We only want to auto-play once
-    if (hasUserInteracted.current) return;
-
-    const tryAutoPlay = async () => {
-      try {
-        await audioRef.current?.play();
-        setIsPlaying(true);
-        hasUserInteracted.current = true;
-        cleanupListeners();
-      } catch (err) {
-        console.log("Autoplay blocked, waiting for interaction...");
-      }
-    };
-
-    const handleInteraction = () => {
-      if (!hasUserInteracted.current) {
-        tryAutoPlay();
-      }
-    };
-
-    const cleanupListeners = () => {
-      ['click', 'touchstart', 'keyup'].forEach(event => {
-        window.removeEventListener(event, handleInteraction);
-      });
-    };
-
-    // Initial attempt
-    tryAutoPlay();
-
-    // Fallback: Start audio on hard interaction
-    ['click', 'touchstart', 'keyup'].forEach(event => {
-      window.addEventListener(event, handleInteraction);
-    });
-
-    return () => cleanupListeners();
-  }, [track]);
+  // No automatic initialization—audio will only play on user click.
 
   const togglePlay = (e) => {
     e.stopPropagation(); // prevent window interaction listeners from grabbing this
