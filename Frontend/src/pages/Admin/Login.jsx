@@ -23,17 +23,21 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
       const { data } = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', data.token);
       navigate('/kisauadminmattress/dashboard');
     } catch (err) {
       setError('Invalid credentials');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +75,9 @@ const Login = () => {
               </button>
             </div>
           </div>
-          <button type="submit" className="login-btn">Sign In</button>
+          <button type="submit" className={`login-btn ${loading ? 'loading' : ''}`} disabled={loading}>
+            {loading ? <span className="btn-spinner"></span> : 'Sign In'}
+          </button>
         </form>
       </div>
     </div>

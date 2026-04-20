@@ -34,7 +34,7 @@ const ProductManagement = ({ view = 'all' }) => {
 
   useEffect(() => { fetchProducts(); }, []);
 
-  const filteredProducts = view === 'categories' && filterCategory !== 'All' 
+  const filteredProducts = filterCategory !== 'All' 
     ? products.filter(p => p.category === filterCategory)
     : products;
 
@@ -156,7 +156,8 @@ const ProductManagement = ({ view = 'all' }) => {
     setShowForm(true);
   };
 
-  const categories = ['All', 'Heavy Duty', 'Standard', 'Moko', 'Superfoam', 'Johari Fibre', 'Bed Base', 'Pillow'];
+  // Derived categories from products to ensure consistency
+  const dynamicCategories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
 
   // Helper to get display image (first variant's image)
   const getDisplayImage = (product) => {
@@ -191,10 +192,10 @@ const ProductManagement = ({ view = 'all' }) => {
           </button>
         )}
 
-        {view === 'categories' && (
+        {(view === 'all' || view === 'categories') && (
           <div className="category-filter">
             <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-              {categories.map(c => <option key={c} value={c}>{c}</option>)}
+              {dynamicCategories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
         )}
