@@ -192,3 +192,41 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+/* --- Mobile / Responsive Styles --- */
+@media (max-width: 1024px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-mgmt h2 {
+    font-size: 1.75rem;
+  }
+
+  .settings-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-uploads-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-mini-preview {
+    aspect-ratio: 16/9;
+  }
+
+  .hero-upload-preview {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mini-hero-preview {
+    width: 100%;
+    height: 120px;
+  }
+}

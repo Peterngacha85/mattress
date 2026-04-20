@@ -214,14 +214,14 @@ const ProductManagement = ({ view = 'all' }) => {
           <tbody>
             {filteredProducts.map(p => (
               <tr key={p._id}>
-                <td><img src={getDisplayImage(p)} className="table-img" alt={p.name} /></td>
-                <td>{p.name}</td>
-                <td>{p.category}</td>
-                <td className="sizes-col">
+                <td data-label="Image"><img src={getDisplayImage(p)} className="table-img" alt={p.name} /></td>
+                <td data-label="Name">{p.name}</td>
+                <td data-label="Category">{p.category}</td>
+                <td data-label="Variants" className="sizes-col">
                   {getVariantSummary(p)}
                 </td>
                 {view === 'all' && (
-                  <td className="actions">
+                  <td data-label="Actions" className="actions">
                     <button onClick={() => startEdit(p)}><Edit size={18} /></button>
                     <button onClick={() => deleteProduct(p._id)} className="delete"><Trash2 size={18} /></button>
                   </td>

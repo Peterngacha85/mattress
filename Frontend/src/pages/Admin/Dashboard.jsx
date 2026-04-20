@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
-import { Package, Settings, LogOut, LayoutDashboard, ClipboardList, ListTree } from 'lucide-react';
+import { Package, Settings, LogOut, LayoutDashboard, ClipboardList, ListTree, Menu, X } from 'lucide-react';
 import ProductManagement from './ProductManagement';
 import SettingsManagement from './SettingsManagement';
 import api from '../../services/api';
@@ -74,6 +74,10 @@ const AdminOverview = () => {
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -83,34 +87,47 @@ const Dashboard = () => {
   const isActive = (path) => location.pathname.includes(path);
 
   return (
-    <div className="dashboard-layout">
+    <div className={`dashboard-layout ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      {/* Mobile Header */}
+      <header className="mobile-header">
+        <div className="sidebar-brand">
+          KISAU<span>ADMIN</span>
+        </div>
+        <button className="menu-toggle" onClick={toggleSidebar}>
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </header>
+
+      {/* Backdrop for mobile */}
+      <div className="sidebar-backdrop" onClick={closeSidebar}></div>
+
       <aside className="sidebar">
         <div className="sidebar-brand">
           KISAU<span>ADMIN</span>
         </div>
         <nav className="sidebar-nav">
-          <Link to="/kisauadminmattress/dashboard" className={`nav-item ${isActive('dashboard') && !isActive('products') && !isActive('settings') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/dashboard" onClick={closeSidebar} className={`nav-item ${isActive('dashboard') && !isActive('products') && !isActive('settings') ? 'active' : ''}`}>
             <LayoutDashboard size={20} />
             <span>Overview</span>
           </Link>
-          <Link to="/kisauadminmattress/products" className={`nav-item ${isActive('products') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/products" onClick={closeSidebar} className={`nav-item ${isActive('products') ? 'active' : ''}`}>
             <Package size={20} />
             <span>Products</span>
           </Link>
-          <Link to="/kisauadminmattress/inventory" className={`nav-item ${isActive('inventory') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/inventory" onClick={closeSidebar} className={`nav-item ${isActive('inventory') ? 'active' : ''}`}>
             <ClipboardList size={20} />
             <span>Inventory</span>
           </Link>
-          <Link to="/kisauadminmattress/categories" className={`nav-item ${isActive('categories') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/categories" onClick={closeSidebar} className={`nav-item ${isActive('categories') ? 'active' : ''}`}>
             <ListTree size={20} />
             <span>Categories</span>
           </Link>
-          <Link to="/kisauadminmattress/settings" className={`nav-item ${isActive('settings') ? 'active' : ''}`}>
+          <Link to="/kisauadminmattress/settings" onClick={closeSidebar} className={`nav-item ${isActive('settings') ? 'active' : ''}`}>
             <Settings size={20} />
             <span>Settings</span>
           </Link>
         </nav>
-        <button className="logout-btn" onClick={handleLogout}>
+        <button className="logout-btn" onClick={() => { handleLogout(); closeSidebar(); }}>
           <LogOut size={20} />
           <span>Logout</span>
         </button>
