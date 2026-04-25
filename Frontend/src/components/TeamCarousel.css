@@ -1,6 +1,8 @@
 .team-carousel-container {
   position: relative;
   width: 100%;
+  max-width: 480px; /* Exactly 3 images * 160px */
+  margin: 0 auto;
   overflow: hidden;
   border-radius: 20px;
   height: 250px;
@@ -84,6 +86,7 @@
 @media (max-width: 768px) {
   .team-carousel-container {
     height: 200px;
+    max-width: 360px; /* 3 images * 120px */
   }
   
   .team-carousel-slide {
