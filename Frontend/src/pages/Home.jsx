@@ -4,6 +4,7 @@ import PremiumSection from '../components/PremiumSection';
 import ProductGrid from '../components/ProductGrid';
 import Footer from '../components/Footer';
 import GoogleMap from '../components/GoogleMap';
+import TeamCarousel from '../components/TeamCarousel';
 import { useAppContext } from '../context/AppContext';
 import { Truck, ShieldCheck, CreditCard, Clock, Award } from 'lucide-react';
 import './Home.css';
@@ -80,29 +81,7 @@ const Home = () => {
               </button>
             </div>
             <div className="about-image-collage">
-              <div className="img-container">
-                <img 
-                  src={settings.aboutImage1 || "/images/products/about-mattress.png"} 
-                  alt="Our team" 
-                />
-              </div>
-              <div className="img-container">
-                <img 
-                  src={settings.aboutImage2 || "/images/products/mattress_2.png"} 
-                  alt="Showroom" 
-                />
-              </div>
-              <div className="img-container">
-                <img 
-                  src={settings.aboutImage3 || "/images/site/WhatsApp Image 2026-04-17 at 19.54.04.jpeg"} 
-                  alt="Mattress setup" 
-                />
-              </div>
-              
-              <div className="about-team-card">
-                <h3>Our Team</h3>
-                <p>Meet our dedicated team of sleep specialists who are passionate about helping you find the perfect mattress for your needs.</p>
-              </div>
+              <TeamCarousel />
             </div>
           </div>
         </div>

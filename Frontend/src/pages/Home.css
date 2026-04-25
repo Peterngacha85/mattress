@@ -128,55 +128,11 @@
 }
 
 .about-image-collage {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
   position: relative;
-  align-items: center;
-}
-
-.img-container {
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.img-container img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
 }
 
-.img-container:hover img {
-  transform: scale(1.05);
-}
 
-.about-team-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-10%, -10%);
-  background: #0a0a0a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.5rem;
-  border-radius: 12px;
-  max-width: 250px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-  z-index: 2;
-}
-
-.about-team-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: white;
-}
-
-.about-team-card p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
 
 .contact-section {
   padding: 8rem 0;
@@ -195,17 +151,8 @@
     padding-right: 0;
   }
   .about-image-collage {
-    grid-template-columns: 1fr; /* Stack images on mobile for better visibility */
-    max-width: 400px;
+    width: 100%;
     margin: 0 auto;
-  }
-  .about-team-card {
-    transform: translate(-50%, 0);
-    top: auto;
-    bottom: -60px; /* Push it down further */
-    left: 50%;
-    max-width: 90%;
-    width: 280px;
   }
 }
 

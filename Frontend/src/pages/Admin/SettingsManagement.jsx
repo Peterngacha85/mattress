@@ -10,15 +10,12 @@ const SettingsManagement = () => {
     whatsappNumber: '',
     mapLocation: '',
     heroBgImage: '',
-    aboutImage1: '',
-    aboutImage2: '',
-    aboutImage3: '',
     audioTracks: []
   });
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [heroLoading, setHeroLoading] = useState(false);
-  const [aboutLoading, setAboutLoading] = useState({ img1: false, img2: false, img3: false });
+  const [aboutLoading, setAboutLoading] = useState(false);
 
   const fetchSettings = async () => {
     const { data } = await api.get('/settings');
@@ -35,9 +32,7 @@ const SettingsManagement = () => {
         whatsappNumber: settings.whatsappNumber,
         mapLocation: settings.mapLocation,
         heroBgImage: settings.heroBgImage,
-        aboutImage1: settings.aboutImage1,
-        aboutImage2: settings.aboutImage2,
-        aboutImage3: settings.aboutImage3
+        heroBgImage: settings.heroBgImage
       });
       toast.success("Settings saved!");
     } catch (err) {
@@ -64,23 +59,7 @@ const SettingsManagement = () => {
     }
   };
 
-  const handleAboutUpload = async (e, slot) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    setAboutLoading(prev => ({ ...prev, [slot]: true }));
-    try {
-      const { data } = await api.post('/upload', formData);
-      setSettings(prev => ({ ...prev, [`aboutImage${slot.replace('img','')}`]: data.url }));
-      toast.success(`About Image ${slot.replace('img','')} updated locally. Save to confirm.`);
-    } catch (err) {
-      // Handled by interceptor
-    } finally {
-      setAboutLoading(prev => ({ ...prev, [slot]: false }));
-    }
-  };
+
 
   const handleAudioUpload = async (e) => {
     const file = e.target.files[0];
@@ -165,26 +144,7 @@ const SettingsManagement = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label>About Us Collage Images (3 Slots)</label>
-              <div className="about-uploads-grid">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="about-upload-item">
-                    <div className="about-mini-preview">
-                      {settings[`aboutImage${i}`] ? (
-                        <img src={settings[`aboutImage${i}`]} alt={`About ${i}`} />
-                      ) : (
-                        <div className="placeholder-thumb"><Image size={16} /></div>
-                      )}
-                    </div>
-                    <label className={`about-mini-btn ${aboutLoading[`img${i}`] ? 'disabled' : ''}`}>
-                      <Upload size={14} />
-                      <input type="file" hidden onChange={(e) => handleAboutUpload(e, `img${i}`)} />
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
+
 
             <button type="submit" className="save-btn" disabled={loading}>
               <Save size={18} /> {loading ? 'Saving...' : 'Save All Settings'}
