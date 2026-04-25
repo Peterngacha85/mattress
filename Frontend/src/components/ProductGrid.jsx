@@ -7,14 +7,16 @@ import './ProductGrid.css';
 const ProductGrid = () => {
   const { products, loading, searchTerm, setSearchTerm } = useAppContext();
   const [activeCategory, setActiveCategory] = useState('ALL');
-  const [activeType, setActiveType] = useState('All');
+  const [activeSubCategory, setActiveSubCategory] = useState('All');
+  const [activeDuty, setActiveDuty] = useState('All');
   const [activeThickness, setActiveThickness] = useState('All');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100000]);
 
   // Dynamically collect unique categories and types from the actual product data
   const categories = ['ALL', ...new Set(products.map(p => p.category))].sort((a, b) => a === 'ALL' ? -1 : b === 'ALL' ? 1 : a.localeCompare(b));
-  const types = ['All', ...new Set(products.map(p => p.type))].sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
+  const subCategories = ['All', ...new Set(products.map(p => p.subCategory))].sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
+  const duties = ['All', ...new Set(products.map(p => p.duty).filter(Boolean))].sort();
   
   // Dynamically collect all thicknesses from product variants
   const allThicknesses = [...new Set(
@@ -25,7 +27,8 @@ const ProductGrid = () => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === 'ALL' || product.category === activeCategory;
-    const matchesType = activeType === 'All' || product.type === activeType;
+    const matchesSubCategory = activeSubCategory === 'All' || product.subCategory === activeSubCategory;
+    const matchesDuty = activeDuty === 'All' || product.duty === activeDuty;
     
     // Thickness filter: check if any variant matches the selected thickness
     const matchesThickness = activeThickness === 'All' || 
@@ -36,7 +39,7 @@ const ProductGrid = () => {
     const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
     const matchesPrice = minPrice >= priceRange[0] && minPrice <= priceRange[1];
 
-    return matchesSearch && matchesCategory && matchesType && matchesThickness && matchesPrice;
+    return matchesSearch && matchesCategory && matchesSubCategory && matchesDuty && matchesThickness && matchesPrice;
   });
 
   if (loading) return <div className="loading-state">Loading Selection...</div>;
@@ -71,7 +74,7 @@ const ProductGrid = () => {
               <button 
                 className="reset-text-btn" 
                 onClick={() => {
-                  setActiveCategory('ALL'); setActiveType('All'); setActiveThickness('All'); 
+                  setActiveCategory('ALL'); setActiveSubCategory('All'); setActiveDuty('All'); setActiveThickness('All'); 
                   setSearchTerm(''); setPriceRange([0, 100000]);
                 }}
               >
@@ -89,12 +92,21 @@ const ProductGrid = () => {
                   ))}
                 </div>
               </div>
-              <div className="filter-col">
-                <h4>Type</h4>
+               <div className="filter-col">
+                <h4>Brand / Type</h4>
                 <div className="scroll-list">
-                  <button className={activeType === 'All' ? 'active' : ''} onClick={() => setActiveType('All')}>All Types</button>
-                  {types.map(t => (
-                    <button key={t} className={activeType === t ? 'active' : ''} onClick={() => setActiveType(t)}>{t}</button>
+                  <button className={activeSubCategory === 'All' ? 'active' : ''} onClick={() => setActiveSubCategory('All')}>All Brands</button>
+                  {subCategories.map(sc => (
+                    <button key={sc} className={activeSubCategory === sc ? 'active' : ''} onClick={() => setActiveSubCategory(sc)}>{sc}</button>
+                  ))}
+                </div>
+              </div>
+              <div className="filter-col">
+                <h4>Duty / Quality</h4>
+                <div className="scroll-list">
+                  <button className={activeDuty === 'All' ? 'active' : ''} onClick={() => setActiveDuty('All')}>All Duties</button>
+                  {duties.map(d => (
+                    <button key={d} className={activeDuty === d ? 'active' : ''} onClick={() => setActiveDuty(d)}>{d}</button>
                   ))}
                 </div>
               </div>

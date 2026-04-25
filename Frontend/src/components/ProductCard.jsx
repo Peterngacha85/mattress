@@ -29,7 +29,7 @@ const ProductCard = ({ product }) => {
     setSelectedSizeIdx(0); // Always start with the first size of that thickness
   };
 
-  const displayImage = currentVariant.image || '/images/products/mattress_1.png';
+  const displayImage = currentSizeOption.image || '/images/products/mattress_1.png';
   const hasMultipleThicknesses = uniqueThicknesses.length > 1;
 
   const handleWhatsApp = () => {

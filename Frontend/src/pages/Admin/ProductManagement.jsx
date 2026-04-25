@@ -14,14 +14,14 @@ const ProductManagement = ({ view = 'all' }) => {
   
   const initialForm = {
     name: '', 
-    category: 'Heavy Duty', 
-    type: 'High-Density', 
+    category: 'Foam Mattress', 
+    subCategory: '', 
+    duty: '',
     description: '',
     variants: [
       { 
         thickness: '8 Inches', 
-        image: '', 
-        sizes: [{ size: '3x6', price: '' }] 
+        sizes: [{ size: '3x6', price: '', image: '' }] 
       }
     ]
   };
@@ -42,7 +42,7 @@ const ProductManagement = ({ view = 'all' }) => {
   const addVariant = () => {
     setFormData({ 
       ...formData, 
-      variants: [...formData.variants, { thickness: '', image: '', sizes: [{ size: '', price: '' }] }] 
+      variants: [...formData.variants, { thickness: '', sizes: [{ size: '', price: '', image: '' }] }] 
     });
   };
 
@@ -59,7 +59,7 @@ const ProductManagement = ({ view = 'all' }) => {
 
   const addSizeToVariant = (vIdx) => {
     const updated = [...formData.variants];
-    updated[vIdx].sizes.push({ size: '', price: '' });
+    updated[vIdx].sizes.push({ size: '', price: '', image: '' });
     setFormData({ ...formData, variants: updated });
   };
 
@@ -75,8 +75,8 @@ const ProductManagement = ({ view = 'all' }) => {
     setFormData({ ...formData, variants: updated });
   };
 
-  // Upload image for a specific variant
-  const handleVariantImageUpload = async (e, vIdx) => {
+  // Upload image for a specific size within a variant
+  const handleSizeImageUpload = async (e, vIdx, sIdx) => {
     const file = e.target.files[0];
     if (!file) return;
     const formDataFile = new FormData();
@@ -84,8 +84,10 @@ const ProductManagement = ({ view = 'all' }) => {
     setLoading(true);
     try {
       const { data } = await api.post('/upload', formDataFile);
-      updateVariantField(vIdx, 'image', data.url);
-      toast.success(`Image uploaded for variant ${vIdx + 1}`);
+      const updated = [...formData.variants];
+      updated[vIdx].sizes[sIdx].image = data.url;
+      setFormData({ ...formData, variants: updated });
+      toast.success(`Image uploaded for size ${sIdx + 1}`);
     } catch (err) {
       // Handled by interceptor
     } finally {
@@ -96,19 +98,15 @@ const ProductManagement = ({ view = 'all' }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate at least one variant with image and sizes
+    // Validate variants and sizes
     for (let i = 0; i < formData.variants.length; i++) {
       const v = formData.variants[i];
       if (!v.thickness) {
         toast.error(`Variant ${i + 1}: Thickness is required`);
         return;
       }
-      if (!v.image) {
-        toast.error(`Variant ${i + 1}: Please upload an image`);
-        return;
-      }
-      if (v.sizes.length === 0 || v.sizes.some(s => !s.size || !s.price)) {
-        toast.error(`Variant ${i + 1}: All sizes must have a name and price`);
+      if (v.sizes.length === 0 || v.sizes.some(s => !s.size || !s.price || !s.image)) {
+        toast.error(`Variant ${i + 1}: All sizes must have a name, price, and image`);
         return;
       }
     }
@@ -148,9 +146,10 @@ const ProductManagement = ({ view = 'all' }) => {
     setFormData({
       name: p.name,
       category: p.category,
-      type: p.type,
+      subCategory: p.subCategory,
+      duty: p.duty || '',
       description: p.description,
-      variants: p.variants || [{ thickness: 'Standard', image: '', sizes: [{ size: '', price: '' }] }],
+      variants: p.variants || [{ thickness: '8 Inches', sizes: [{ size: '', price: '', image: '' }] }],
       isFeatured: p.isFeatured
     });
     setShowForm(true);
@@ -159,9 +158,9 @@ const ProductManagement = ({ view = 'all' }) => {
   // Derived categories from products to ensure consistency
   const dynamicCategories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
 
-  // Helper to get display image (first variant's image)
+  // Helper to get display image (first variant's first size image)
   const getDisplayImage = (product) => {
-    return product.variants?.[0]?.image || '/images/products/mattress_1.png';
+    return product.variants?.[0]?.sizes?.[0]?.image || '/images/products/mattress_1.png';
   };
 
   // Helper to summarize sizes/prices from all variants
@@ -205,10 +204,11 @@ const ProductManagement = ({ view = 'all' }) => {
         <table className="product-table">
           <thead>
             <tr>
-              <th>Image</th>
+               <th>Image</th>
               <th>Name</th>
               <th>Category</th>
-              <th>Variants</th>
+              <th>Brand / Type</th>
+              <th>Variants (Sizes & Prices)</th>
               {view === 'all' && <th>Actions</th>}
             </tr>
           </thead>
@@ -218,6 +218,9 @@ const ProductManagement = ({ view = 'all' }) => {
                 <td data-label="Image"><img src={getDisplayImage(p)} className="table-img" alt={p.name} /></td>
                 <td data-label="Name">{p.name}</td>
                 <td data-label="Category">{p.category}</td>
+                <td data-label="Brand / Type">
+                  {p.subCategory} {p.duty && <span className="duty-badge">{p.duty}</span>}
+                </td>
                 <td data-label="Variants" className="sizes-col">
                   {getVariantSummary(p)}
                 </td>
@@ -244,25 +247,57 @@ const ProductManagement = ({ view = 'all' }) => {
               <input type="text" placeholder="Product Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
               
               <div className="form-row">
-                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
-                  <option>Heavy Duty</option>
-                  <option>Standard</option>
-                  <option>Moko</option>
-                  <option>Superfoam</option>
-                  <option>Johari Fibre</option>
-                  <option>Bed Base</option>
-                  <option>Pillow</option>
+                <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value, subCategory: '', duty: ''})}>
+                  <option>Foam Mattress</option>
+                  <option>Spring Mattress</option>
+                  <option>Fibre Mattress</option>
                 </select>
-                <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
-                  <option>High-Density</option>
-                  <option>Medium Duty</option>
-                  <option>Memory Foam</option>
-                  <option>Orthopedic</option>
-                  <option>Heavy Duty</option>
-                  <option>Furniture</option>
-                  <option>Accessory</option>
-                </select>
+
+                {formData.category === 'Foam Mattress' && (
+                  <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
+                    <option value="">Select Brand</option>
+                    <option>Morning Glory</option>
+                    <option>Moko</option>
+                  </select>
+                )}
+
+                {formData.category === 'Spring Mattress' && (
+                  <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
+                    <option value="">Select Brand</option>
+                    <option>Maharaja</option>
+                    <option>Mimi Spring</option>
+                    <option>Durapoa</option>
+                    <option>Orthopedic Orthobliss</option>
+                  </select>
+                )}
+
+                {formData.category === 'Fibre Mattress' && (
+                  <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
+                    <option value="">Select Brand</option>
+                    <option>Johari Fibre</option>
+                    <option>Sicily Fibre</option>
+                  </select>
+                )}
               </div>
+
+              {(formData.subCategory === 'Morning Glory' || formData.subCategory === 'Moko') && (
+                <div className="form-row">
+                  <select value={formData.duty} onChange={e => setFormData({...formData, duty: e.target.value})}>
+                    <option value="">Select Duty</option>
+                    {formData.subCategory === 'Morning Glory' ? (
+                      <>
+                        <option>Heavy Duty</option>
+                        <option>Medium Duty</option>
+                      </>
+                    ) : (
+                      <>
+                        <option>Heavy</option>
+                        <option>Medium</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+              )}
 
               <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required />
 
@@ -285,8 +320,7 @@ const ProductManagement = ({ view = 'all' }) => {
                         </button>
                       )}
                     </div>
-                    
-                    <div className="variant-top-row">
+                                        <div className="variant-top-row">
                       <input 
                         type="text" 
                         placeholder="Thickness (e.g. 8 Inches)" 
@@ -295,16 +329,6 @@ const ProductManagement = ({ view = 'all' }) => {
                         className="thickness-input"
                         required 
                       />
-                      <div className="variant-image-upload">
-                        <label className={`variant-upload-btn ${loading ? 'disabled' : ''}`}>
-                          <Image size={16} /> 
-                          {variant.image ? 'Change Image' : 'Upload Image'}
-                          <input type="file" hidden onChange={(e) => handleVariantImageUpload(e, vIdx)} accept="image/*" />
-                        </label>
-                        {variant.image && (
-                          <img src={variant.image} alt={`Variant ${vIdx + 1}`} className="variant-preview-img" />
-                        )}
-                      </div>
                     </div>
 
                     <div className="variant-sizes-section">
@@ -314,27 +338,39 @@ const ProductManagement = ({ view = 'all' }) => {
                           <Plus size={12} /> Add Size
                         </button>
                       </div>
-                      {variant.sizes.map((sizeOpt, sIdx) => (
-                        <div key={sIdx} className="size-option-row">
-                          <input 
-                            type="text" 
-                            placeholder="Size (e.g. 4x6)" 
-                            value={sizeOpt.size} 
-                            onChange={e => updateSizeField(vIdx, sIdx, 'size', e.target.value)} 
-                            required 
-                          />
-                          <input 
-                            type="number" 
-                            placeholder="Price" 
-                            value={sizeOpt.price} 
-                            onChange={e => updateSizeField(vIdx, sIdx, 'price', e.target.value)} 
-                            required 
-                          />
-                          {variant.sizes.length > 1 && (
-                            <button type="button" onClick={() => removeSizeFromVariant(vIdx, sIdx)} className="remove-size">
-                              <X size={16} />
-                            </button>
-                          )}
+                       {variant.sizes.map((sizeOpt, sIdx) => (
+                        <div key={sIdx} className="size-option-card">
+                          <div className="size-option-row">
+                            <input 
+                              type="text" 
+                              placeholder="Size (e.g. 4x6)" 
+                              value={sizeOpt.size} 
+                              onChange={e => updateSizeField(vIdx, sIdx, 'size', e.target.value)} 
+                              required 
+                            />
+                            <input 
+                              type="number" 
+                              placeholder="Price" 
+                              value={sizeOpt.price} 
+                              onChange={e => updateSizeField(vIdx, sIdx, 'price', e.target.value)} 
+                              required 
+                            />
+                            {variant.sizes.length > 1 && (
+                              <button type="button" onClick={() => removeSizeFromVariant(vIdx, sIdx)} className="remove-size">
+                                <X size={16} />
+                              </button>
+                            )}
+                          </div>
+                          <div className="size-image-upload">
+                            <label className={`size-upload-btn ${loading ? 'disabled' : ''}`}>
+                              <Upload size={14} />
+                              {sizeOpt.image ? 'Change Size Image' : 'Upload Size Image'}
+                              <input type="file" hidden onChange={(e) => handleSizeImageUpload(e, vIdx, sIdx)} accept="image/*" />
+                            </label>
+                            {sizeOpt.image && (
+                              <img src={sizeOpt.image} alt={`Size ${sIdx + 1}`} className="size-preview-img" />
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
