@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const variantSizeSchema = new mongoose.Schema({
     size: { type: String, required: true },   // e.g., "3x6", "4x6", "5x6", "6x6"
     price: { type: Number, required: true },
-    image: { type: String, required: true }    // Image for this specific size
+    image: { type: String, default: "" }       // Image for this specific size – uploaded via Admin
 });
 
 const variantSchema = new mongoose.Schema({
