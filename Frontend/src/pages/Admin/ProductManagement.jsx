@@ -105,8 +105,8 @@ const ProductManagement = ({ view = 'all' }) => {
         toast.error(`Variant ${i + 1}: Thickness is required`);
         return;
       }
-      if (v.sizes.length === 0 || v.sizes.some(s => !s.size || !s.price || !s.image)) {
-        toast.error(`Variant ${i + 1}: All sizes must have a name, price, and image`);
+      if (v.sizes.length === 0 || v.sizes.some(s => !s.size || !s.price)) {
+        toast.error(`Variant ${i + 1}: All sizes must have a name and price`);
         return;
       }
     }
@@ -251,6 +251,8 @@ const ProductManagement = ({ view = 'all' }) => {
                   <option>Foam Mattress</option>
                   <option>Spring Mattress</option>
                   <option>Fibre Mattress</option>
+                  <option>Pillow</option>
+                  <option>Bed Base</option>
                 </select>
 
                 {formData.category === 'Foam Mattress' && (
@@ -265,17 +267,27 @@ const ProductManagement = ({ view = 'all' }) => {
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
                     <option value="">Select Brand</option>
                     <option>Maharaja</option>
-                    <option>Mimi Spring</option>
-                    <option>Durapoa</option>
-                    <option>Orthopedic Orthobliss</option>
+                    <option>Mimi</option>
+                    <option>Dura Poa</option>
+                    <option>Orthobliss</option>
                   </select>
                 )}
 
                 {formData.category === 'Fibre Mattress' && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
                     <option value="">Select Brand</option>
-                    <option>Johari Fibre</option>
-                    <option>Sicily Fibre</option>
+                    <option>Johari</option>
+                    <option>Sicily</option>
+                  </select>
+                )}
+
+                {formData.category === 'Pillow' && (
+                  <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
+                    <option value="">Select Brand</option>
+                    <option>Morning Glory</option>
+                    <option>Johari</option>
+                    <option>Mimi</option>
+                    <option>Luxury</option>
                   </select>
                 )}
               </div>
