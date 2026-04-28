@@ -17,6 +17,7 @@ const productSchema = new mongoose.Schema({
     category: { type: String, required: true },     // Foam Mattress, Spring Mattress, Fibre Mattress
     subCategory: { type: String, required: true },  // Morning Glory, Moko, Johari, Sicily, etc.
     duty: { type: String },                         // Heavy Duty, Medium Duty, Heavy, Medium (Optional)
+    mainImage: { type: String, default: "" },      // Primary product image
     variants: [variantSchema],
     rating: { type: Number, default: 5 },
     isFeatured: { type: Boolean, default: false }

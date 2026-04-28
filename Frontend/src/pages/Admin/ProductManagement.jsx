@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit, X, Upload, Image, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, Edit, X, Upload, Image, ChevronDown, ChevronUp, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 import { useAppContext } from '../../context/AppContext';
@@ -11,12 +11,15 @@ const ProductManagement = ({ view = 'all' }) => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filterCategory, setFilterCategory] = useState('All');
+  const [filterSubCategory, setFilterSubCategory] = useState('All');
+  const [adminSearch, setAdminSearch] = useState('');
   
   const initialForm = {
     name: '', 
     category: 'Foam Mattress', 
     subCategory: '', 
     duty: '',
+    mainImage: '',
     description: '',
     variants: [
       { 
@@ -34,9 +37,14 @@ const ProductManagement = ({ view = 'all' }) => {
 
   useEffect(() => { fetchProducts(); }, []);
 
-  const filteredProducts = filterCategory !== 'All' 
-    ? products.filter(p => p.category === filterCategory)
-    : products;
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = filterCategory === 'All' || p.category === filterCategory;
+    const matchesSubCategory = filterSubCategory === 'All' || p.subCategory === filterSubCategory;
+    const matchesSearch = p.name.toLowerCase().includes(adminSearch.toLowerCase()) || 
+                          p.subCategory?.toLowerCase().includes(adminSearch.toLowerCase()) ||
+                          p.category?.toLowerCase().includes(adminSearch.toLowerCase());
+    return matchesCategory && matchesSubCategory && matchesSearch;
+  });
 
   // --- Variant Management ---
   const addVariant = () => {
@@ -95,6 +103,23 @@ const ProductManagement = ({ view = 'all' }) => {
     }
   };
 
+  const handleMainImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const formDataFile = new FormData();
+    formDataFile.append('file', file);
+    setLoading(true);
+    try {
+      const { data } = await api.post('/upload', formDataFile);
+      setFormData({ ...formData, mainImage: data.url });
+      toast.success("Main image uploaded");
+    } catch (err) {
+      // Handled
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -148,6 +173,7 @@ const ProductManagement = ({ view = 'all' }) => {
       category: p.category,
       subCategory: p.subCategory,
       duty: p.duty || '',
+      mainImage: p.mainImage || '',
       description: p.description,
       variants: p.variants || [{ thickness: '8 Inches', sizes: [{ size: '', price: '', image: '' }] }],
       isFeatured: p.isFeatured
@@ -155,12 +181,16 @@ const ProductManagement = ({ view = 'all' }) => {
     setShowForm(true);
   };
 
-  // Derived categories from products to ensure consistency
-  const dynamicCategories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
+  // Derived categories and brands to ensure consistency and quick access
+  const baseCategories = ['All', 'Foam Mattress', 'Spring Mattress', 'Fibre Mattress', 'Fibre', 'Moko', 'Pillow', 'Bed Base'];
+  const dynamicCategories = [...new Set([...baseCategories, ...products.map(p => p.category).filter(Boolean)])];
+  
+  const baseBrands = ['All', 'Morning Glory', 'Moko', 'Johari', 'Sicily', 'Mimi', 'Dura Poa', 'Maharaja', 'Orthobliss'];
+  const dynamicSubCategories = [...new Set([...baseBrands, ...products.map(p => p.subCategory).filter(Boolean)])];
 
-  // Helper to get display image (first variant's first size image)
+  // Helper to get display image (main product image or first size image)
   const getDisplayImage = (product) => {
-    return product.variants?.[0]?.sizes?.[0]?.image || '/images/products/mattress_1.png';
+    return product.mainImage || product.variants?.[0]?.sizes?.[0]?.image || '/images/products/mattress_1.png';
   };
 
   // Helper to summarize sizes/prices from all variants
@@ -191,11 +221,30 @@ const ProductManagement = ({ view = 'all' }) => {
           </button>
         )}
 
-        {(view === 'all' || view === 'categories') && (
-          <div className="category-filter">
-            <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-              {dynamicCategories.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
+        {view === 'all' && (
+          <div className="admin-controls">
+            <div className="admin-search">
+              <Search size={18} />
+              <input 
+                type="text" 
+                placeholder="Search products..." 
+                value={adminSearch} 
+                onChange={(e) => setAdminSearch(e.target.value)} 
+              />
+            </div>
+            <div className="admin-filters">
+              <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+                {dynamicCategories.map(c => <option key={c} value={c}>{c === 'All' ? 'All Categories' : c}</option>)}
+              </select>
+              <select value={filterSubCategory} onChange={(e) => setFilterSubCategory(e.target.value)}>
+                {dynamicSubCategories.map(c => <option key={c} value={c}>{c === 'All' ? 'All Brands' : c}</option>)}
+              </select>
+              {(filterCategory !== 'All' || filterSubCategory !== 'All' || adminSearch) && (
+                <button className="reset-filter-btn" onClick={() => { setFilterCategory('All'); setFilterSubCategory('All'); setAdminSearch(''); }}>
+                  Reset
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -244,6 +293,21 @@ const ProductManagement = ({ view = 'all' }) => {
               <button onClick={() => setShowForm(false)}><X size={24} /></button>
             </div>
             <form onSubmit={handleSubmit} className="product-form">
+              <div className="main-image-upload-section">
+                <label className={`main-upload-area ${loading ? 'loading' : ''}`}>
+                  <input type="file" hidden onChange={handleMainImageUpload} accept="image/*" />
+                  {formData.mainImage ? (
+                    <img src={formData.mainImage} alt="Main Product" className="main-preview" />
+                  ) : (
+                    <div className="upload-placeholder">
+                      <Upload size={32} />
+                      <span>Upload Main Product Image</span>
+                    </div>
+                  )}
+                  {formData.mainImage && <div className="change-overlay"><Upload size={20} /> Change Image</div>}
+                </label>
+              </div>
+
               <input type="text" placeholder="Product Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
               
               <div className="form-row">
@@ -251,6 +315,8 @@ const ProductManagement = ({ view = 'all' }) => {
                   <option>Foam Mattress</option>
                   <option>Spring Mattress</option>
                   <option>Fibre Mattress</option>
+                  <option>Fibre</option>
+                  <option>Moko</option>
                   <option>Pillow</option>
                   <option>Bed Base</option>
                 </select>
@@ -281,13 +347,20 @@ const ProductManagement = ({ view = 'all' }) => {
                   </select>
                 )}
 
-                {formData.category === 'Pillow' && (
+                {(formData.category === 'Fibre' || formData.category === 'Pillow') && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
                     <option value="">Select Brand</option>
                     <option>Morning Glory</option>
                     <option>Johari</option>
                     <option>Mimi</option>
                     <option>Luxury</option>
+                  </select>
+                )}
+
+                {formData.category === 'Moko' && (
+                  <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
+                    <option value="">Select Brand</option>
+                    <option>Moko</option>
                   </select>
                 )}
               </div>
