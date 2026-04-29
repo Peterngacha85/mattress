@@ -8,27 +8,32 @@ const ProductGrid = () => {
   const { products, loading, searchTerm, setSearchTerm } = useAppContext();
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [activeSubCategory, setActiveSubCategory] = useState('All');
-  const [activeDuty, setActiveDuty] = useState('All');
   const [activeThickness, setActiveThickness] = useState('All');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100000]);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   // Dynamically collect unique categories and types from the actual product data
   const categories = ['ALL', ...new Set(products.map(p => p.category))].sort((a, b) => a === 'ALL' ? -1 : b === 'ALL' ? 1 : a.localeCompare(b));
   const subCategories = ['All', ...new Set(products.map(p => p.subCategory))].sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
-  const duties = ['All', ...new Set(products.map(p => p.duty).filter(Boolean))].sort();
   
   // Dynamically collect all thicknesses from product variants
   const allThicknesses = [...new Set(
     products.flatMap(p => (p.variants || []).map(v => v.thickness))
   )].filter(t => t && t !== 'Standard').sort();
 
+  // Create a map of categories to their subcategories for the dropdown menus
+  const categoryMap = {};
+  products.forEach(p => {
+    if (!categoryMap[p.category]) categoryMap[p.category] = new Set();
+    if (p.subCategory) categoryMap[p.category].add(p.subCategory);
+  });
+
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === 'ALL' || product.category === activeCategory;
     const matchesSubCategory = activeSubCategory === 'All' || product.subCategory === activeSubCategory;
-    const matchesDuty = activeDuty === 'All' || product.duty === activeDuty;
     
     // Thickness filter: check if any variant matches the selected thickness
     const matchesThickness = activeThickness === 'All' || 
@@ -39,7 +44,7 @@ const ProductGrid = () => {
     const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
     const matchesPrice = minPrice >= priceRange[0] && minPrice <= priceRange[1];
 
-    return matchesSearch && matchesCategory && matchesSubCategory && matchesDuty && matchesThickness && matchesPrice;
+    return matchesSearch && matchesCategory && matchesSubCategory && matchesThickness && matchesPrice;
   });
 
   if (loading) return <div className="loading-state">Loading Selection...</div>;
@@ -74,7 +79,7 @@ const ProductGrid = () => {
               <button 
                 className="reset-text-btn" 
                 onClick={() => {
-                  setActiveCategory('ALL'); setActiveSubCategory('All'); setActiveDuty('All'); setActiveThickness('All'); 
+                  setActiveCategory('ALL'); setActiveSubCategory('All'); setActiveThickness('All'); 
                   setSearchTerm(''); setPriceRange([0, 100000]);
                 }}
               >
@@ -101,15 +106,7 @@ const ProductGrid = () => {
                   ))}
                 </div>
               </div>
-              <div className="filter-col">
-                <h4>Duty / Quality</h4>
-                <div className="scroll-list">
-                  <button className={activeDuty === 'All' ? 'active' : ''} onClick={() => setActiveDuty('All')}>All Duties</button>
-                  {duties.map(d => (
-                    <button key={d} className={activeDuty === d ? 'active' : ''} onClick={() => setActiveDuty(d)}>{d}</button>
-                  ))}
-                </div>
-              </div>
+
               <div className="filter-col">
                 <h4>Thickness</h4>
                 <div className="scroll-list">
@@ -151,15 +148,55 @@ const ProductGrid = () => {
 
       {/* Main Category Tabs (Shortcut) */}
       <div className="category-scroll hide-scrollbar">
-        {categories.filter(c => c !== 'ALL').slice(0, 8).map(cat => (
-          <button 
-            key={cat} 
-            className={`tab-btn ${activeCategory === cat ? 'active' : ''}`}
-            onClick={() => setActiveCategory(cat)}
-          >
-            {cat}
-          </button>
-        ))}
+        {categories.filter(c => c !== 'ALL').slice(0, 8).map(cat => {
+          const subs = Array.from(categoryMap[cat] || []).sort();
+          return (
+            <div key={cat} className="category-dropdown-container">
+              <button 
+                className={`tab-btn ${activeCategory === cat ? 'active' : ''}`}
+                onClick={() => {
+                  if (subs.length > 0) {
+                    setOpenDropdown(openDropdown === cat ? null : cat);
+                  } else {
+                    setActiveCategory(cat);
+                    setActiveSubCategory('All');
+                    setOpenDropdown(null);
+                  }
+                }}
+              >
+                {cat} {subs.length > 0 && <ChevronDown size={14} style={{ marginLeft: '6px', verticalAlign: 'middle' }} />}
+              </button>
+
+              {openDropdown === cat && subs.length > 0 && (
+                <div className="category-dropdown-menu animate-fade-in">
+                  <button 
+                    className={`dropdown-item ${activeCategory === cat && activeSubCategory === 'All' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setActiveSubCategory('All');
+                      setOpenDropdown(null);
+                    }}
+                  >
+                    All {cat}
+                  </button>
+                  {subs.map(sub => (
+                    <button 
+                      key={sub}
+                      className={`dropdown-item ${activeSubCategory === sub ? 'active' : ''}`}
+                      onClick={() => {
+                        setActiveCategory(cat);
+                        setActiveSubCategory(sub);
+                        setOpenDropdown(null);
+                      }}
+                    >
+                      {sub}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Grid */}

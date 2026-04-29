@@ -16,7 +16,7 @@ const ProductManagement = ({ view = 'all' }) => {
   
   const initialForm = {
     name: '', 
-    category: 'Foam Mattress', 
+    category: 'FOAM MATTRESS', 
     subCategory: '', 
     duty: '',
     mainImage: '',
@@ -182,7 +182,7 @@ const ProductManagement = ({ view = 'all' }) => {
   };
 
   // Derived categories and brands to ensure consistency and quick access
-  const baseCategories = ['All', 'Foam Mattress', 'Spring Mattress', 'Fibre Mattress', 'Fibre', 'Moko', 'Pillow', 'Bed Base'];
+  const baseCategories = ['All', 'FOAM MATTRESS', 'SPRING MATTRESS', 'FIBRE MATTRESS', 'MOKO MATTRESS', 'PILLOWS'];
   const dynamicCategories = [...new Set([...baseCategories, ...products.map(p => p.category).filter(Boolean)])];
   
   const baseBrands = ['All', 'Morning Glory', 'Moko', 'Johari', 'Sicily', 'Mimi', 'Dura Poa', 'Maharaja', 'Orthobliss'];
@@ -312,77 +312,56 @@ const ProductManagement = ({ view = 'all' }) => {
               
               <div className="form-row">
                 <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value, subCategory: '', duty: ''})}>
-                  <option>Foam Mattress</option>
-                  <option>Spring Mattress</option>
-                  <option>Fibre Mattress</option>
-                  <option>Fibre</option>
-                  <option>Moko</option>
-                  <option>Pillow</option>
-                  <option>Bed Base</option>
+                  <option>FOAM MATTRESS</option>
+                  <option>SPRING MATTRESS</option>
+                  <option>FIBRE MATTRESS</option>
+                  <option>MOKO MATTRESS</option>
+                  <option>PILLOWS</option>
                 </select>
 
-                {formData.category === 'Foam Mattress' && (
+                {formData.category === 'FOAM MATTRESS' && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
-                    <option value="">Select Brand</option>
-                    <option>Morning Glory</option>
-                    <option>Moko</option>
+                    <option value="">Select Brand/Type</option>
+                    <option>Morning Glory High Density</option>
+                    <option>Morning Glory Medium Density</option>
                   </select>
                 )}
 
-                {formData.category === 'Spring Mattress' && (
+                {formData.category === 'SPRING MATTRESS' && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
-                    <option value="">Select Brand</option>
-                    <option>Maharaja</option>
-                    <option>Mimi</option>
-                    <option>Dura Poa</option>
-                    <option>Orthobliss</option>
+                    <option value="">Select Brand/Type</option>
+                    <option>Maharaja Spring Mattress</option>
+                    <option>Mimi Spring Mattress</option>
+                    <option>Orthopedic Orthobliss Spring Mattress</option>
+                    <option>Dura Poa Spring Mattress</option>
                   </select>
                 )}
 
-                {formData.category === 'Fibre Mattress' && (
+                {formData.category === 'FIBRE MATTRESS' && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
-                    <option value="">Select Brand</option>
-                    <option>Johari</option>
-                    <option>Sicily</option>
+                    <option value="">Select Brand/Type</option>
+                    <option>Johari Fibre Mattress</option>
+                    <option>Sisily Fibre Mattress</option>
                   </select>
                 )}
 
-                {(formData.category === 'Fibre' || formData.category === 'Pillow') && (
+                {formData.category === 'MOKO MATTRESS' && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
-                    <option value="">Select Brand</option>
-                    <option>Morning Glory</option>
-                    <option>Johari</option>
-                    <option>Mimi</option>
-                    <option>Luxury</option>
+                    <option value="">Select Brand/Type</option>
+                    <option>Moko High Density</option>
+                    <option>Moko Medium Density</option>
                   </select>
                 )}
 
-                {formData.category === 'Moko' && (
+                {formData.category === 'PILLOWS' && (
                   <select value={formData.subCategory} onChange={e => setFormData({...formData, subCategory: e.target.value})}>
-                    <option value="">Select Brand</option>
-                    <option>Moko</option>
+                    <option value="">Select Brand/Type</option>
+                    <option>Johari Fibre Pillow</option>
+                    <option>Mimi Fibre Pillow</option>
+                    <option>Morning Glory Fibre Pillow</option>
                   </select>
                 )}
               </div>
-
-              {(formData.subCategory === 'Morning Glory' || formData.subCategory === 'Moko') && (
-                <div className="form-row">
-                  <select value={formData.duty} onChange={e => setFormData({...formData, duty: e.target.value})}>
-                    <option value="">Select Duty</option>
-                    {formData.subCategory === 'Morning Glory' ? (
-                      <>
-                        <option>Heavy Duty</option>
-                        <option>Medium Duty</option>
-                      </>
-                    ) : (
-                      <>
-                        <option>Heavy</option>
-                        <option>Medium</option>
-                      </>
-                    )}
-                  </select>
-                </div>
-              )}
 
               <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required />
 

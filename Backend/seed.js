@@ -22,9 +22,9 @@ const seedData = async () => {
             {
                 name: "Morning Glory Heavy Duty Plain Cover Mattress",
                 description: "Durable heavy duty plain cover mattress by Morning Glory. Built for long-lasting support and firm comfort.",
-                category: "Foam Mattress",
-                subCategory: "Morning Glory",
-                duty: "Heavy Duty",
+                category: "FOAM MATTRESS",
+                subCategory: "Morning Glory High Density",
+                duty: "",
                 isFeatured: true,
                 variants: [
                     {
@@ -76,9 +76,9 @@ const seedData = async () => {
             {
                 name: "Morning Glory Heavy Duty Quilted Cover Mattress",
                 description: "Premium heavy duty quilted cover mattress by Morning Glory. Superior comfort with quilted finish.",
-                category: "Foam Mattress",
-                subCategory: "Morning Glory",
-                duty: "Heavy Duty",
+                category: "FOAM MATTRESS",
+                subCategory: "Morning Glory High Density",
+                duty: "",
                 isFeatured: true,
                 variants: [
                     {
@@ -148,9 +148,9 @@ const seedData = async () => {
             {
                 name: "Morning Glory Medium Duty Plain Cover Mattress",
                 description: "Morning Glory medium duty plain cover mattress offering everyday comfort at great value.",
-                category: "Foam Mattress",
-                subCategory: "Morning Glory",
-                duty: "Medium Duty",
+                category: "FOAM MATTRESS",
+                subCategory: "Morning Glory Medium Density",
+                duty: "",
                 isFeatured: false,
                 variants: [
                     {
@@ -194,9 +194,9 @@ const seedData = async () => {
             {
                 name: "Morning Glory Medium Duty Quilted Cover Mattress",
                 description: "Morning Glory medium duty quilted cover mattress. Comfortable, affordable, and elegantly finished.",
-                category: "Foam Mattress",
-                subCategory: "Morning Glory",
-                duty: "Medium Duty",
+                category: "FOAM MATTRESS",
+                subCategory: "Morning Glory Medium Density",
+                duty: "",
                 isFeatured: false,
                 variants: [
                     {
@@ -240,8 +240,8 @@ const seedData = async () => {
             {
                 name: "Superfoam Orthobliss Spring Mattress",
                 description: "Superfoam Orthobliss spring mattress designed for orthopedic support and restful sleep.",
-                category: "Spring Mattress",
-                subCategory: "Orthobliss",
+                category: "SPRING MATTRESS",
+                subCategory: "Orthopedic Orthobliss Spring Mattress",
                 duty: "",
                 isFeatured: true,
                 variants: [
@@ -265,8 +265,8 @@ const seedData = async () => {
             {
                 name: "Maharaja Spring Mattress",
                 description: "Maharaja spring mattress with 5-year warranty (standard) and 7-year warranty on pocket spring variant. Premium support for king-like comfort.",
-                category: "Spring Mattress",
-                subCategory: "Maharaja",
+                category: "SPRING MATTRESS",
+                subCategory: "Maharaja Spring Mattress",
                 duty: "",
                 isFeatured: true,
                 variants: [
@@ -316,8 +316,8 @@ const seedData = async () => {
             {
                 name: "Mimi Spring Mattress",
                 description: "Mimi spring mattress with 10-year warranty. High quality spring system for lasting support and comfort.",
-                category: "Spring Mattress",
-                subCategory: "Mimi",
+                category: "SPRING MATTRESS",
+                subCategory: "Mimi Spring Mattress",
                 duty: "",
                 isFeatured: true,
                 variants: [
@@ -348,8 +348,8 @@ const seedData = async () => {
             {
                 name: "Dura Poa Spring Mattress",
                 description: "Dura Poa spring mattress with 10-year warranty. Exceptional durability and spring comfort at every size.",
-                category: "Spring Mattress",
-                subCategory: "Dura Poa",
+                category: "SPRING MATTRESS",
+                subCategory: "Dura Poa Spring Mattress",
                 duty: "",
                 isFeatured: false,
                 variants: [
@@ -382,8 +382,8 @@ const seedData = async () => {
             {
                 name: "Morning Glory Fibre Pillow",
                 description: "Morning Glory fibre pillow – 500g. Soft and lightweight for comfortable sleep.",
-                category: "Pillow",
-                subCategory: "Morning Glory",
+                category: "PILLOWS",
+                subCategory: "Morning Glory Fibre Pillow",
                 duty: "",
                 isFeatured: false,
                 variants: [
@@ -398,8 +398,8 @@ const seedData = async () => {
             {
                 name: "Johari Fibre Pillow",
                 description: "Johari fibre pillow – 600g. Supportive and durable for everyday use.",
-                category: "Pillow",
-                subCategory: "Johari",
+                category: "PILLOWS",
+                subCategory: "Johari Fibre Pillow",
                 duty: "",
                 isFeatured: false,
                 variants: [
@@ -414,8 +414,8 @@ const seedData = async () => {
             {
                 name: "Luxury Fibre Pillow",
                 description: "Luxury fibre pillow – 1000g. Plush and premium for a hotel-like sleep experience.",
-                category: "Pillow",
-                subCategory: "Luxury",
+                category: "PILLOWS",
+                subCategory: "Johari Fibre Pillow",
                 duty: "",
                 isFeatured: false,
                 variants: [
@@ -430,8 +430,8 @@ const seedData = async () => {
             {
                 name: "Mimi Fibre Pillow",
                 description: "Mimi fibre pillow – 800g. High quality filling for comfortable and restful sleep.",
-                category: "Pillow",
-                subCategory: "Mimi",
+                category: "PILLOWS",
+                subCategory: "Mimi Fibre Pillow",
                 duty: "",
                 isFeatured: false,
                 variants: [
