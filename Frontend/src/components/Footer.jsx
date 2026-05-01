@@ -74,7 +74,7 @@ const Footer = () => {
       
       <div className="footer-bottom">
         <div className="container">
-          <p>&copy; {new Date().getFullYear()} Kisau Mattresses. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Kisau Mattresses. All rights reserved. Developed by <a href="https://fastweb.co.ke" target="_blank" rel="noopener noreferrer">Fastweb Technologies</a></p>
         </div>
       </div>
     </footer>
