@@ -2,7 +2,7 @@ import React from 'react';
 
 const GoogleMap = ({ address }) => {
   let mapUrl = '';
-  const defaultUrl = `https://maps.google.com/maps?q=-1.1506324,36.9397432&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const defaultUrl = `https://maps.google.com/maps?q=KISAU%20MATTRESS%20DISTRIBUTOR&t=&z=17&ie=UTF8&iwloc=B&output=embed`;
 
   if (!address) {
     mapUrl = defaultUrl;
@@ -14,8 +14,8 @@ const GoogleMap = ({ address }) => {
     // Direct embed URL
     mapUrl = address;
   } else if (address.includes('maps.app.goo.gl') || address.includes('goo.gl/maps')) {
-    // Google Maps short link — use it as search query (short links can't be embedded directly)
-    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    // Google Maps short link — resolve to business name as short links can't be embedded
+    mapUrl = `https://maps.google.com/maps?q=KISAU%20MATTRESS%20DISTRIBUTOR&t=&z=17&ie=UTF8&iwloc=B&output=embed`;
   } else if (address.includes('google.com/maps/place') || address.includes('google.com/maps?') || address.includes('google.com/maps/@')) {
     // Full Google Maps URL — extract place name, coordinates, and zoom
     
@@ -24,7 +24,7 @@ const GoogleMap = ({ address }) => {
     const cameraCoordMatch = address.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
     const zoomMatch = address.match(/,(\d+)z/);
     
-    const zoom = zoomMatch ? zoomMatch[1] : '15';
+    const zoom = zoomMatch ? zoomMatch[1] : '17';
     let query = '';
 
     if (placeMatch) {
@@ -45,7 +45,7 @@ const GoogleMap = ({ address }) => {
     }
   } else {
     // Plain text address (e.g., "Ruiru, Kenya")
-    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=B&output=embed`;
+    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=17&ie=UTF8&iwloc=B&output=embed`;
   }
 
   console.log('GoogleMap Address:', address);
