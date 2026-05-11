@@ -17,35 +17,39 @@ const GoogleMap = ({ address }) => {
     // Google Maps short link — use it as search query (short links can't be embedded directly)
     mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
   } else if (address.includes('google.com/maps/place') || address.includes('google.com/maps?') || address.includes('google.com/maps/@')) {
-    // Full Google Maps URL — extract place name or coordinates
+    // Full Google Maps URL — extract place name, coordinates, and zoom
     
-    // 1. Try to extract place name from /place/NAME/ pattern (usually the best for showing a pin with a label)
     const placeMatch = address.match(/\/place\/([^\/?]+)/);
-    // 2. Try to extract specific coordinates from !3d!4d pattern in data segment (more accurate than @ camera coords)
     const dataCoordMatch = address.match(/!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/);
-    // 3. Try to extract camera coordinates from @lat,lng pattern
     const cameraCoordMatch = address.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+    const zoomMatch = address.match(/,(\d+)z/);
+    
+    const zoom = zoomMatch ? zoomMatch[1] : '15';
+    let query = '';
 
-    if (placeMatch) {
-      const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
-      mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-    } else if (dataCoordMatch) {
-      mapUrl = `https://maps.google.com/maps?q=${dataCoordMatch[1]},${dataCoordMatch[2]}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    if (dataCoordMatch) {
+      // Use exact coordinates if available
+      query = `${dataCoordMatch[1]},${dataCoordMatch[2]}`;
+    } else if (placeMatch) {
+      // Fallback to place name
+      query = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
     } else if (cameraCoordMatch) {
-      mapUrl = `https://maps.google.com/maps?q=${cameraCoordMatch[1]},${cameraCoordMatch[2]}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+      // Fallback to camera coordinates
+      query = `${cameraCoordMatch[1]},${cameraCoordMatch[2]}`;
+    }
+
+    if (query) {
+      mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=${zoom}&ie=UTF8&iwloc=B&output=embed`;
     } else {
-      // Try q= parameter
-      const qMatch = address.match(/[?&]q=([^&]+)/);
-      if (qMatch) {
-        mapUrl = `https://maps.google.com/maps?q=${qMatch[1]}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-      } else {
-        mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-      }
+      mapUrl = defaultUrl;
     }
   } else {
     // Plain text address (e.g., "Ruiru, Kenya")
-    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&t=&z=15&ie=UTF8&iwloc=B&output=embed`;
   }
+
+  console.log('GoogleMap Address:', address);
+  console.log('Generated Map URL:', mapUrl);
 
   return (
     <div className="map-container" style={{ width: '100%', height: '400px', borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--border)' }}>
