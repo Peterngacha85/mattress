@@ -27,12 +27,12 @@ const GoogleMap = ({ address }) => {
     const zoom = zoomMatch ? zoomMatch[1] : '15';
     let query = '';
 
-    if (dataCoordMatch) {
-      // Use exact coordinates if available
-      query = `${dataCoordMatch[1]},${dataCoordMatch[2]}`;
-    } else if (placeMatch) {
-      // Fallback to place name
+    if (placeMatch) {
+      // Use place name first (best for pins and labels)
       query = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+    } else if (dataCoordMatch) {
+      // Fallback to exact coordinates
+      query = `${dataCoordMatch[1]},${dataCoordMatch[2]}`;
     } else if (cameraCoordMatch) {
       // Fallback to camera coordinates
       query = `${cameraCoordMatch[1]},${cameraCoordMatch[2]}`;
