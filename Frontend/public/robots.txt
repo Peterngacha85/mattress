@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kisaumattress.co.ke/sitemap.xml
